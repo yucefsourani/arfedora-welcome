@@ -44,7 +44,7 @@ website              = ("WebSite","https://www.arduino.cc/")
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
                             threads=threads,
                             button_image="arduino.svg",
