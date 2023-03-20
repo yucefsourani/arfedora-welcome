@@ -21,42 +21,35 @@
 #  MA 02110-1301, USA.
 #  
 #  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
-import os
-from urllib import request
-from gi.repository import GLib
-import subprocess
-import tempfile
-import queue
+
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
-                
-arch                 = ["all"]
-distro_name          = ["all"]
-distro_version       = ["all"]
-category             = "<b>Multimedia</b>"
-category_icon_theme  = "applications-multimedia"
-
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("all",)
+distro_version       = ("all",)
+category             = "Multimedias"
+category_icon_theme  = "applications-multimedia-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Ciano"
+subtitle             = "A multimedia file converter\n(Flatpak User Wide)"
+keywords             = "converter audio video ciano"
+licenses             = (("License\nGPL v3.0+","https://www.gnu.org/licenses/gpl-3.0.html"),)
+website              = ("WebSite","https://robertsanseries.github.io/ciano/")
 
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="ciano.png",
                             button_install_label="Install Ciano (Flatpak User wide)",
                             button_remove_label="Remove Ciano (Flatpak User wide)",
-                            buttontooltip="A multimedia file converter",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
                             button_frame=False,
                             blockparent=False,
                             waitmsg="Wait...",
@@ -68,7 +61,7 @@ class Plugin(BasePlugin):
                             ifremovesucessmsg="Remove Ciano Done",
                             beforeinstallyesorno="Start Install Ciano ?",
                             beforeremoveyesorno="Start Remove Ciano ?",
-                            expand=False,
+                            parallel_install = False,
                             daemon=True)
 
         self.parent = parent
