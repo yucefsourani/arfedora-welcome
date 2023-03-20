@@ -21,39 +21,36 @@
 #  MA 02110-1301, USA.
 #  
 #  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import os
-from gi.repository import GLib
-
-
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("all",)
+distro_version       = ("all",)
+category             = "Graphics"
+category_icon_theme  = "applications-graphics-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Blender"
+subtitle             = "Free and open source 3D creation suite\n(Flatpak User Wide)"
+keywords             = "blender animation"
+licenses             = (("License\nGPL v3.0","https://www.gnu.org/licenses/gpl-3.0.html"),)
+website              = ("WebSite","https://www.blender.org/")
                 
-arch                 = ["all"]
-distro_name          = ["all"]
-distro_version       = ["all"]
-category             = "<b>Graphics</b>"
-category_icon_theme  = "applications-graphics"
 
 
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="Blender-icon.png",
-                            button_install_label="Install blender  (Flatpak User wide)",
-                            button_remove_label="Remove blender (Flatpak User wide)",
-                            buttontooltip="Install Remove blender (Flatpak User wide)",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             waitmsg="Wait...",
@@ -65,7 +62,7 @@ class Plugin(BasePlugin):
                             ifremovesucessmsg="Remove blender Done",
                             beforeinstallyesorno="Start Install blender ?",
                             beforeremoveyesorno="Start Remove blender ?",
-                            expand=False,
+                            parallel_install=False,
                             daemon=True)
 
         self.parent = parent
