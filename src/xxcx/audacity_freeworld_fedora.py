@@ -66,7 +66,7 @@ class Plugin(BasePlugin):
         
         
     def check(self):
-        check_package = all([self.check_package(pack) for pack in all_package])
+        check_package = all([ utils.check_rpm_package_exists(pack) for pack in all_package])
         return not check_package
         
     def install(self):
