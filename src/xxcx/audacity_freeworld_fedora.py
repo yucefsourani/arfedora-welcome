@@ -20,38 +20,38 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-#  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+#
+from arfedra_welcome import utils
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
-import os
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("fedora",)
+distro_version       = ("all",)
+category             = "Multimedia"
+category_icon_theme  = "applications-multimedia-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Audacity"
+subtitle             = "Record and edit audio files"
+keywords             = "audio record audacity"
+licenses             = (("License\nUNKNOWN","https://www.audacityteam.org/"),)
+website              = ("WebSite","https://www.audacityteam.org/")
                 
-arch                 = ["all"]
-distro_name          = ["fedora"]
-distro_version       = ["all"]
-category             = "<b>Multimedia</b>"
-category_icon_theme  = "applications-multimedia"
 
 all_package = ["audacity-freeworld"]
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="audacity.png",
-                            button_install_label="Install Audacity Freeworld",
-                            button_remove_label="Remove Audacity Freeworld",
-                            buttontooltip="Multitrack audio editor",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             daemon=True,
@@ -60,6 +60,7 @@ class Plugin(BasePlugin):
                             loadingmsg="Loading...",
                             ifinstallfailmsg="Install Audacity Freeworld Failed",
                             ifremovefailmsg="Remove Audacity Freeworld Failed",
+                            parallel_install=False,
                             expand=False)
 
 
@@ -70,12 +71,12 @@ class Plugin(BasePlugin):
         return not check_package
         
     def install(self):
-        rpmfusion  = all([ self.check_package(pack) for pack in ["rpmfusion-nonfree-release", "rpmfusion-free-release"]])
-        to_install = [pack for pack in all_package if not self.check_package(pack)]
+        rpmfusion  = all([ utils.check_rpm_package_exists(pack) for pack in ["rpmfusion-nonfree-release", "rpmfusion-free-release"]])
+        to_install = [pack for pack in all_package if not utils.check_rpm_package_exists(pack)]
         to_install = " ".join(to_install)
         commands = ["dnf install {} -y --best".format(to_install)]
         if not rpmfusion:
-            d_version = self.get_distro_version()
+            d_version = utils.get_distro_version()
             command_to_install_rpmfusion = "dnf install  --best -y --nogpgcheck  \
     http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{}.noarch.rpm \
     http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{}.noarch.rpm".format(d_version,d_version)
@@ -94,17 +95,5 @@ class Plugin(BasePlugin):
             return True
         return False
 
-    def check_package(self,package_name):
-        if subprocess.call("rpm -q {} &>/dev/null".format(package_name),shell=True) == 0:
-            return True
-        return False
+      
 
-    def get_distro_version(self):
-        result=""
-        if not os.path.isfile("/etc/os-release"):
-            return None
-        with open("/etc/os-release") as myfile:
-            for l in myfile:
-                if l.startswith("VERSION_ID"):
-                    result=l.split("=",1)[1].strip()
-        return result.replace("\"","").replace("'","")
