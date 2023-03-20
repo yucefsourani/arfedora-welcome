@@ -1,0 +1,8 @@
+data/com.github.yucefsourani.Arfedorawelcome.desktop.in
+data/com.github.yucefsourani.Arfedorawelcome.appdata.xml.in
+data/com.github.yucefsourani.Arfedorawelcome.gschema.xml
+src/main.py
+src/window.py
+src/window.ui
+src/about.py
+src/main_page.py

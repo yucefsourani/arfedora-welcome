@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=arfedora-welcome
+Exec=arfedora-welcome
+Icon=com.github.yucefsourani.Arfedorawelcome
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true
