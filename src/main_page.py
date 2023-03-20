@@ -89,7 +89,6 @@ class MainPage():
                     banner = Gtk.Overlay.new()
                     box  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
                     box.append(banner)
-                    self.mainbox.banner = banner
                     sw = Gtk.ScrolledWindow.new()
                     #box.set_hexpand(True)
                     box.set_vexpand(True)
@@ -145,12 +144,14 @@ class MainPage():
                     self.view_switcher_listbox.append(category_box)
                     category_label.props.use_markup=True
                     category_label.set_markup(plugin.category)
-                    self.all_category.setdefault(plugin.category,listbox)
+                    self.all_category.setdefault(plugin.category,[listbox,banner])
+                    listbox.banner = banner
                     
                 else:
-                    listbox =  self.all_category[plugin.category]
+                    listbox,banner =  self.all_category[plugin.category]
                 if plugin.type_ == "installer":
                     plugin_class = plugin.Plugin(parent=self.mainbox,threads=self.threads)
+                    plugin_class.__banner__ = banner
                     action_row          = Adw.ExpanderRow.new()
                     action_row.keywords = plugin.keywords
                     action_row.set_title_lines(2)

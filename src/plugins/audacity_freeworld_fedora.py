@@ -21,7 +21,7 @@
 #  MA 02110-1301, USA.
 #  
 #
-from arfedra_welcome import utils
+from arfedora_welcome import utils
 from arfedora_welcome.classesplugin import BasePlugin
 from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
@@ -80,7 +80,7 @@ class Plugin(BasePlugin):
     http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{}.noarch.rpm \
     http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{}.noarch.rpm".format(d_version,d_version)
             commands.insert(0,command_to_install_rpmfusion)
-        if self.check_package("audacity"):
+        if utils.check_rpm_package_exists("audacity"):
             commands.insert(0,"rpm -v --nodeps -e audacity")
         to_run = write_to_tmp(commands)
 

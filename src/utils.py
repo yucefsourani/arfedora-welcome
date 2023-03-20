@@ -228,7 +228,7 @@ class DownloadFile(GObject.Object):
         self.reset()
         return self.__saveas
         
-def check_rpm_package_exists(self,package_name):
+def check_rpm_package_exists(package_name):
     if subprocess.call("rpm -q {} &>/dev/null".format(package_name),shell=True) == 0:
         return True
     return False

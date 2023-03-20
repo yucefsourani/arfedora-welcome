@@ -21,7 +21,7 @@
 #  MA 02110-1301, USA.
 #  
 #
-from arfedra_welcome import utils
+from arfedora_welcome import utils
 from arfedora_welcome.classesplugin import BasePlugin
 from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
@@ -32,7 +32,7 @@ arch                 = ("all",)
 distro_name          = ("fedora",)
 distro_version       = ("all",)
 category             = "Internet"
-category_icon_theme  = "applications-internet-symbolic"
+category_icon_theme  = "web-browser-symbolic"
 desktop_env          = ("all",)
 display_type         = ("all",)
 title                = "Chromium"

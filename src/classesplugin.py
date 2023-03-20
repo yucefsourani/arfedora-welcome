@@ -185,7 +185,6 @@ class BasePlugin():
         self.__daemon                = daemon
         self.__parallel_install      = parallel_install
         self.uuid_ = uuid.uuid1()
-        self.__banner__              = self.___parent.banner
         
         self.__button_box__ = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=2)
         self.__button__     = Gtk.Button.new()

@@ -24,6 +24,7 @@
 from arfedora_welcome.classesplugin import BasePlugin
 from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
+import os
 
 if_true_skip         = False
 type_                = "installer"
@@ -31,7 +32,7 @@ arch                 = ("x86_64",)
 distro_name          = ("fedora",)
 distro_version       = ("all",)
 category             = "Internet"
-category_icon_theme  = "applications-internet-symbolic"
+category_icon_theme  = "web-browser-symbolic"
 desktop_env          = ("all",)
 display_type         = ("all",)
 title                = "Brave"
