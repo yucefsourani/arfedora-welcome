@@ -21,27 +21,24 @@
 #  MA 02110-1301, USA.
 #  
 #  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
-import os
-from urllib import request
-from gi.repository import GLib
-import subprocess
-import tempfile
-import queue
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
-                
-arch                 = ["all"]
-distro_name          = ["all"]
-distro_version       = ["all"]
-category             = "<b>Developer Tools</b>"
-category_icon_theme  = "applications-development"
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("all",)
+distro_version       = ("all",)
+category             = "Developer Tools"
+category_icon_theme  = "applications-developmen-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Arduino IDE V2"
+subtitle             = "Open-source electronics prototyping platform\n(Flatpak User Wide)"
+keywords             = "arduino electronics"
+licenses             = (("License\nAGPL v3.0","https://www.gnu.org/licenses/agpl-3.0.html"),)
+website              = ("WebSite","https://www.arduino.cc/")
 
 
 
