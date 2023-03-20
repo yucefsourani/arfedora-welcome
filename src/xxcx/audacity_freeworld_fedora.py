@@ -60,8 +60,7 @@ class Plugin(BasePlugin):
                             loadingmsg="Loading...",
                             ifinstallfailmsg="Install Audacity Freeworld Failed",
                             ifremovefailmsg="Remove Audacity Freeworld Failed",
-                            parallel_install=False,
-                            expand=False)
+                            parallel_install=False)
 
 
         
