@@ -89,7 +89,7 @@ class Plugin(BasePlugin):
         return False
         
     def remove(self):
-        to_remove = " ".join([pack for pack in all_package if self.check_package(pack)])
+        to_remove = " ".join([pack for pack in all_package if utils.check_rpm_package_exists(pack)])
         if subprocess.call("pkexec rpm -v --nodeps -e {}".format(to_remove),shell=True)==0:
             return True
         return False
