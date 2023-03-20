@@ -22,7 +22,7 @@
 #
 #
 from arfedora_welcome.classesplugin import BasePlugin
-from arfedora_welcome.utils import get_uniq_name,write_to_tmp,DownloadFile
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
 
 if_true_skip         = False
@@ -72,10 +72,6 @@ class Plugin(BasePlugin):
         return not self.check_package(self.package_name)
 
     def install(self):
-        d = DownloadFile(self,"https://github.com/subhra74/xdm/releases/download/7.2.11/xdm-setup-7.2.11.tar.xz")
-        d.connect("done",self.on_done_)
-        d.start()
-        return
         if not self.check_repo("flathub"):
             if subprocess.call("flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo --user",shell=True) !=0:
                 print("Add Flathub repo Failed.")
