@@ -21,42 +21,36 @@
 #  MA 02110-1301, USA.
 #  
 #  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
-import os
-from urllib import request
-from gi.repository import GLib
-import subprocess
-import tempfile
-import queue
+
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
-                
-arch                 = ["all"]
-distro_name          = ["all"]
-distro_version       = ["all"]
-category             = "<b>Developer Tools</b>"
-category_icon_theme  = "applications-development"
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("all",)
+distro_version       = ("all",)
+category             = "Developer Tools"
+category_icon_theme  = "applications-developmen-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Fritzing"
+subtitle             = "Electronic Design Tool\n(Flatpak User Wide)"
+keywords             = "arduino electronics fritzing"
+licenses             = (("License\nLGPL V-3.0+","https://www.gnu.org/licenses/gpl-3.0.html"),)
+website              = ("WebSite","https://fritzing.org/")
 
 
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="52b1e48a757b7f28448b4567.png",
-                            button_install_label="Install Fritzing (Flatpak User wide)",
-                            button_remove_label="Remove Fritzing (Flatpak User wide)",
-                            buttontooltip="Electronic Design Tool",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             waitmsg="Wait...",
@@ -68,7 +62,7 @@ class Plugin(BasePlugin):
                             ifremovesucessmsg="Remove Fritzing Done",
                             beforeinstallyesorno="Start Install Fritzing ?",
                             beforeremoveyesorno="Start Remove Fritzing ?",
-                            expand=False,
+                            parallel_install = False,
                             daemon=True)
 
         self.parent = parent
