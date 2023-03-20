@@ -21,42 +21,37 @@
 #  MA 02110-1301, USA.
 #  
 #  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
-import os
-from urllib import request
-from gi.repository import GLib
-import subprocess
-import tempfile
-import queue
+
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
-                
-arch                 = ["all"]
-distro_name          = ["all"]
-distro_version       = ["all"]
-category             = "<b>Utils</b>"
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("all",)
+distro_version       = ("all",)
+category             = "Utils"
 category_icon_theme  = "preferences-other"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Anydesk"
+subtitle             = "Connect to a computer remotely\n(Flatpak User Wide)"
+keywords             = "remote desktop anydesk"
+licenses             = (("License\nProprietary","https://www.anydesk.com/"),)
+website              = ("WebSite","https://www.anydesk.com/")
+                
 
 
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="com.anydesk.Anydesk.png",
-                            button_install_label="Install AnyDesk (Flatpak User wide)",
-                            button_remove_label="Remove AnyDesk (Flatpak User wide)",
-                            buttontooltip="Install Remove AnyDesk (Flatpak User wide)",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             waitmsg="Wait...",
@@ -68,7 +63,7 @@ class Plugin(BasePlugin):
                             ifremovesucessmsg="Remove AnyDesk Done",
                             beforeinstallyesorno="Start Install AnyDesk?",
                             beforeremoveyesorno="Start Remove AnyDesk?",
-                            expand=False,
+                            parallel_install=False,
                             daemon=True)
 
         self.parent = parent
