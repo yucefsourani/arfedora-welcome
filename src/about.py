@@ -135,8 +135,8 @@ class AboutPage():
         developer_listbox.set_show_separators(True)
 
         developer_listbox_clamp.set_child(developer_listbox)
-        developer_listbox.add_css_class("frame")
-        developer_listbox.add_css_class("card")
+        developer_listbox.set_css_classes(["boxed-list"])
+        developer_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         greditsbox.append(developer_listbox_clamp)
 
 
@@ -162,8 +162,8 @@ class AboutPage():
         translator_listbox.set_show_separators(True)
 
         translator_listbox_clamp.set_child(translator_listbox)
-        translator_listbox.add_css_class("frame")
-        translator_listbox.add_css_class("card")
+        translator_listbox.set_css_classes(["boxed-list"])
+        translator_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         greditsbox.append(translator_listbox_clamp)
 
 

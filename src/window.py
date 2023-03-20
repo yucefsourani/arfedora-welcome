@@ -42,40 +42,60 @@ class ArfedoraWelcomeWindow(Adw.ApplicationWindow):
         Gtk.StyleContext.add_provider_for_display(Gdk.Display().get_default(),
                                                  style_provider, 
                                                  Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-        self.window_settings = Gio.Settings.new_with_path("com.github.yucefsourani.Arfedorawelcome","/com/github/yucefsourani/Arfedorawelcome/")
-        self._vte = self.window_settings.get_boolean("vte")
-        self.window_settings.bind("width", self, "default-width",
+        self.app_settings = Gio.Settings.new_with_path("com.github.yucefsourani.Arfedorawelcome","/com/github/yucefsourani/Arfedorawelcome/")
+        self._vte = self.app_settings.get_boolean("vte")
+        self.app_settings.bind("width", self, "default-width",
                            Gio.SettingsBindFlags.DEFAULT)
-        self.window_settings.bind("height", self, "default-height",
+        self.app_settings.bind("height", self, "default-height",
                            Gio.SettingsBindFlags.DEFAULT)
-        self.window_settings.bind("is-maximized", self, "maximized",
+        self.app_settings.bind("is-maximized", self, "maximized",
                            Gio.SettingsBindFlags.DEFAULT)
-        self.window_settings.bind("is-fullscreen", self, "fullscreened",
+        self.app_settings.bind("is-fullscreen", self, "fullscreened",
                            Gio.SettingsBindFlags.DEFAULT)
 
         self.mainbox = Gtk.Box.new(Gtk.Orientation.VERTICAL,0)
         self.mainbox.props.hexpand = True
         self.mainbox.props.vexpand = True
         self.set_content(self.mainbox)
+        self.current_flap_button      = Gtk.ToggleButton.new()
+        image_ = Gtk.Image.new_from_icon_name("open-menu-symbolic")
+        self.current_flap_button.set_child(image_)
         self.make_header()
 
+
+    def on_visible_child_name_changed(self,w,property_):
+        if w.props.visible_child_name == "mhbox":
+            self.current_flap_button.show()
+        else:
+            self.current_flap_button.hide()
+            
     def make_header(self):
         self.mainstack = Adw.ViewStack.new()
+        self.mainstack.connect("notify::visible-child-name",self.on_visible_child_name_changed)
         self.mainstack.set_hexpand(True)
         self.mainstack.set_vexpand(True)
 
         self.mhbox     = MainPage()
+        flap           = self.mhbox.flap
         self.aboutbox  = AboutPage()
         self.outputbox = OutPutPage()
+
+
+
+        self.current_flap_button.set_active(flap.props.reveal_flap)
+        self.current_flap_button.bind_property("active",flap, "reveal-flap",GObject.BindingFlags.BIDIRECTIONAL )
+        self.app_settings.bind("reveal-flap", flap, "reveal-flap",
+                           Gio.SettingsBindFlags.DEFAULT)
 
         self.mainstack.add_titled_with_icon(self.mhbox,"mhbox",_("Main"),"application-x-executable-symbolic")
         self.mainstack.add_titled_with_icon(self.outputbox,"output",_("Output"),"org.gnome.Logs-symbolic")
         self.mainstack.add_titled_with_icon(self.aboutbox,"aboutbox",_("About"),"help-about-symbolic")
 
 
-        self.window_settings.bind("visible-stack-child", self.mainstack, "visible-child-name",
+        self.app_settings.bind("visible-stack-child", self.mainstack, "visible-child-name",
                            Gio.SettingsBindFlags.DEFAULT)
         self.header = Adw.HeaderBar.new()
+        self.header.pack_start(self.current_flap_button)
 
         self.view_switcher_title = Adw.ViewSwitcherTitle.new()
         self.view_switcher_title.set_stack(self.mainstack)

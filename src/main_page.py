@@ -11,14 +11,21 @@ class MainPage():
     def __new__(cls):
         s = super(MainPage, cls).__new__(cls)
         s.__init__()
-        return s.mainbox
+        return s.mbox
 
     def __init__(self):
+        self.main_overlay  = Gtk.Overlay.new()
+        self.mbox     = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=0)
         self.mainbox  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
+        self.mbox.set_hexpand(True)
+        self.mbox.set_vexpand(True)
         self.mainbox.set_hexpand(True)
         self.mainbox.set_vexpand(True)
+        self.mbox.append(infooverlay)
+        infooverlay.set_child(self.mainbox)
                 
         self.flap = Adw.Flap.new()
+        self.mbox.flap = self.flap
         self.flap.set_hexpand(True)
         self.flap.set_vexpand(True)
         self.mainbox.append(self.flap)
@@ -34,6 +41,7 @@ class MainPage():
         self.main_stack.set_hexpand(True)
         self.main_stack.set_vexpand(True)
         self.view_switcher_listbox = Gtk.ListBox.new()
+        self.view_switcher_listbox.set_css_classes(["navigation-sidebar","background"])
         self.view_switcher_listbox.set_selection_mode( Gtk.SelectionMode.SINGLE )
         self.view_switcher_listbox.set_activate_on_single_click( True )
         self.view_switcher_listbox.connect("row-activated",self.on_view_switcher_row_activated)
@@ -47,16 +55,16 @@ class MainPage():
         
         self.flap.set_flap(view_switcher_box)
         self.flap.set_content(self.main_stack)
-
+        
         self.all_category   = {}
         self.switchcategory = {}
         self.threads        = dict()
         self.loading_all_plugins()
         
-        self.mainbox.append(infooverlay)
 
     def on_view_switcher_row_activated(self,list_box, row):
-        self.main_stack.set_visible_child_name(row.get_child().stack_page_name)
+        page_name = row.get_child().stack_page_name
+        self.main_stack.set_visible_child_name(page_name)
         
     def loading_all_plugins(self):
         distro_name    = get_distro_name_like()
@@ -88,44 +96,65 @@ class MainPage():
                 if plugin.category not in self.all_category.keys():
                     banner = Gtk.Overlay.new()
                     box  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
-                    box.append(banner)
+                    banner.set_child(box)
                     sw = Gtk.ScrolledWindow.new()
                     #box.set_hexpand(True)
                     box.set_vexpand(True)
                     listbox = Gtk.ListBox.new()
-                    listbox.set_css_classes(["frame","view","card"])
+                    listbox.set_css_classes(["boxed-list"])
                     listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-                    listbox.set_show_separators(True)
+                    #listbox.set_show_separators(True)
+                    
                     searchentry = Gtk.SearchEntry.new()
-                    searchbar = Gtk.SearchBar.new()
-                    searchbar.props.margin_top    = 3
-                    searchbar.props.margin_bottom = 3
-                    searchbar.props.margin_start  = 3
-                    searchbar.props.margin_end    = 3 
+                    searchlistbox = Gtk.Box.new(orientation = Gtk.Orientation.HORIZONTAL,spacing=0)
+                    searchlistbox.props.margin_top    = 10
+                    searchlistbox.set_css_classes(["toolbar"])
+                    searchlistbox.set_halign(Gtk.Align.CENTER)
+                    #searchlistbox = Gtk.ListBox.new()
+                    #searchlistbox.set_css_classes(["frame"])
+                    #searchlistbox.set_selection_mode(Gtk.SelectionMode.NONE)
+                    #searchlistbox.set_show_separators(True)
+                    #searchclamp = Adw.Clamp.new()
+                    #searchclamp.props.margin_top    = 10
+                    #searchclamp.props.margin_bottom = 3
+                    #searchclamp.props.margin_start  = 5
+                    #searchclamp.props.margin_end    = 5
+                    #searchclamp.set_maximum_size(500)
+                    #searchclamp.set_child(searchlistbox)
+                    #box.append(searchclamp)
+                    box.append(searchlistbox)
+                    searchbar    = Gtk.SearchBar.new()
+                    searchbar.set_css_classes(["toolbar"])
+                    #searchbarrow = Adw.ActionRow.new()
+                    #searchbarrow.set_child(searchbar)
+                    #searchbar.set_hexpand(True)
+                    #searchlistbox.append(searchbarrow)
+                    searchlistbox.append(searchbar)
+                    #searchbar.props.margin_top    = 3
+                    #searchbar.props.margin_bottom = 3
+                    #searchbar.props.margin_start  = 3
+                    #searchbar.props.margin_end    = 3 
                     searchbar.set_search_mode(True)
                     searchbar.connect_entry(searchentry)
                     searchbar.set_child(searchentry)
-                    searchbar.set_key_capture_widget(self.main_stack)
-                    listbox.append(searchbar)
-                    listbox.get_row_at_index(0).keywords = "SEARCH__BAR"
+                    searchbar.set_key_capture_widget(listbox)
+
                     clamp = Adw.Clamp.new()
-                    #clamp.set_hexpand(True)
                     clamp.set_vexpand(True)
-                    clamp.props.margin_top    = 20
-                    clamp.props.margin_bottom = 20
-                    clamp.props.margin_start  = 20
-                    clamp.props.margin_end    = 20
+                    clamp.props.margin_top    = 3
+                    clamp.props.margin_bottom = 10
+                    clamp.props.margin_start  = 5
+                    clamp.props.margin_end    = 5
                     clamp.set_maximum_size(500)
                     clamp.set_child(listbox)
                     sw.set_child(clamp)
                     box.append(sw)
-                    self.main_stack.add_titled(box,plugin.category,plugin.category)
+                    self.main_stack.add_titled(banner,plugin.category,plugin.category)
                     
                     listbox.set_filter_func(self.on_filter_invalidate,searchentry)
                     searchentry.connect("search_changed",self.on_search_entry_changed,listbox)
                     
-                    category_box = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=1)
-                    #category_box.set_css_classes(["view","card"])
+                    category_box = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=0)
                     category_box.stack_page_name = plugin.category
                     category_box.set_homogeneous(True)
                     category_box.props.margin_start  = 3
@@ -137,6 +166,7 @@ class MainPage():
                     image.props.halign  = Gtk.Align.CENTER
                     category_box.append(image)
                     category_label = Gtk.Label.new()
+                    category_label.add_css_class("caption")
                     category_label.props.hexpand = True
                     category_label.props.halign  = Gtk.Align.CENTER
                     category_box.append(category_label)
@@ -145,8 +175,6 @@ class MainPage():
                     category_label.props.use_markup=True
                     category_label.set_markup(plugin.category)
                     self.all_category.setdefault(plugin.category,[listbox,banner])
-                    listbox.banner = banner
-                    
                 else:
                     listbox,banner =  self.all_category[plugin.category]
                 if plugin.type_ == "installer":
@@ -155,22 +183,24 @@ class MainPage():
                     action_row          = Adw.ExpanderRow.new()
                     action_row.keywords = plugin.keywords
                     action_row.set_title_lines(2)
-                    action_row.set_subtitle_lines(3)
+                    action_row.set_subtitle_lines(2)
                     action_row.add_prefix(plugin_class.__image__)
                     action_row.set_title(plugin.title)
                     action_row.set_subtitle(plugin.subtitle)
                     action_row.add_action(plugin_class.__button_box__)
                     listbox.append(action_row)
                     
-                    row_box = Gtk.Box.new(orientation = Gtk.Orientation.HORIZONTAL,spacing=5)
+                    row_box = Gtk.Box.new(orientation = Gtk.Orientation.HORIZONTAL,spacing=0)
+                    row_box.props.margin_start  = 5
+                    row_box.props.margin_end    = 5
+                    row_box.props.margin_top    = 2
+                    row_box.props.margin_bottom = 2
+                    row_box.set_css_classes(["linked","flat"])
+                    #row_box.set_homogeneous(True)
                     if plugin.website:
                         link_name    = plugin.website[0]
                         website      = plugin.website[1]
                         link_button  = Gtk.LinkButton.new_with_label(website,link_name)
-                        link_button.props.margin_top    = 3
-                        link_button.props.margin_bottom = 3
-                        link_button.props.margin_start  = 3
-                        link_button.props.margin_end    = 3 
                         link_button.set_css_classes(["wait-action-button"])
                         row_box.append(link_button)
                     if plugin.licenses:
@@ -178,10 +208,6 @@ class MainPage():
                             license_type = licenses_info[0]
                             license_web  = licenses_info[1]
                             link_button  = Gtk.LinkButton.new_with_label(license_web,license_type)
-                            link_button.props.margin_top    = 3
-                            link_button.props.margin_bottom = 3
-                            link_button.props.margin_start  = 3
-                            link_button.props.margin_end    = 3 
                             link_button.set_css_classes(["running-destructive-action-button"])
                             row_box.append(link_button)
                     action_row.add_row(row_box)
@@ -198,8 +224,6 @@ class MainPage():
         listbox.invalidate_filter() # run filter (run self.on_filter_invalidate look at self.listbox.set_filter_func(self.on_filter_invalidate) )
         
     def on_filter_invalidate(self,row,searchentry):
-        if row.keywords == "SEARCH__BAR":
-            return True
         text_to_search = searchentry.get_text().strip()
         if  len(text_to_search)<3:
             return True

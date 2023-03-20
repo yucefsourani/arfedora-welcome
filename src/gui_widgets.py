@@ -52,7 +52,7 @@ class IconNamePaint(Gtk.Widget):
             return (self.__h, self.__h, -1, -1)
 
 
-def create_toast(title="",priority=0,button_label="Ok",timeout=0,custom_title=False,action_name=False,action_target=False,infoover=False):
+def create_toast(title="",priority=1,button_label="Ok",timeout=0,custom_title=False,action_name=False,action_target=False,infoover=False):
     toast = Adw.Toast.new(title)
     if custom_title:
         toast.props.custom_title = custom_title
@@ -75,61 +75,68 @@ def create_toast(title="",priority=0,button_label="Ok",timeout=0,custom_title=Fa
     return infoover.add_toast(toast)
 
 
-def on_infobar_response(info_bar, response_id,parent,func,argv,nofunc,noargv):
+def on_infobar_response(info_bar, response_id,parent,infobar,func,argv,nofunc,noargv):
     if response_id == Gtk.ResponseType.CLOSE :
-        on_infobar_close(info_bar,parent)
+        on_infobar_close(info_bar,parent,infobar)
     elif response_id == Gtk.ResponseType.NO:
-        on_infobar_close(info_bar,parent)
+        on_infobar_close(info_bar,parent,infobar)
         if nofunc:
             if noargv:
                 nofunc(*noargv)
             else:
                 nofunc()
     else:
-        on_infobar_close(info_bar,parent)
+        on_infobar_close(info_bar,parent,infobar)
         if func:
             if argv:
                 func(*argv)
             else:
                 func()
     
-def on_infobar_close(infobar,parent):
-    infobar.props.revealed = False
-    all_infobar[parent].remove(infobar)
+def on_infobar_close(infobar_,parent,infobar):
     parent.infobar = None
+    infobar_.props.revealed = False
+    all_infobar[parent].remove(infobar)
+    parent.remove_overlay(infobar)
+    infobar_.unparent()
+    infobar_.run_dispose()
     infobar.unparent()
     infobar.run_dispose()
     if len(all_infobar[parent])>0:
+        print("ok")
         new_infobar    = all_infobar[parent][0]
-        parent.set_child(new_infobar)
+        parent.add_overlay(new_infobar)
         parent.infobar = new_infobar
-        new_infobar.props.revealed = True
+        new_infobar.infobar_.props.revealed = True
     
 def yes_or_no(parent,msg="",func=None,argv=None,nofunc=None,noargv=None,label=False,message_type=2,show_close_button=True,yes="Yes",no="No"):
     if parent not in all_infobar.keys():
         all_infobar.setdefault(parent,list())
     if "infobar" not in parent.__dict__.keys():
         parent.infobar = None
-    infobar          = Gtk.InfoBar.new()
+    infobar          = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=0)
+    infobar_         = Gtk.InfoBar.new()
+    infobar.append(infobar_)
+    infobar.infobar_ = infobar_
     if message_type < 0 or message_type >4:
         message_type = 2
     if label:
-        infobar.add_child(label)
+        infobar_.add_child(label)
     else:
         label = Gtk.Label.new()
         label.props.label = msg
         label.props.wrap  = True
-        infobar.add_child(label)
-    infobar.props.message_type      = Gtk.MessageType(message_type)
-    infobar.props.show_close_button = show_close_button
+        infobar_.add_child(label)
+    infobar_.props.message_type      = Gtk.MessageType(message_type)
+    infobar_.props.show_close_button = show_close_button
     
-    infobar.add_button(yes,-8)
-    infobar.add_button(no,-9)
+    infobar_.add_button(yes,-8)
+    infobar_.add_button(no,-9)
     all_infobar[parent].append(infobar)
-    infobar.connect("close",on_infobar_close,parent)
-    infobar.connect("response",on_infobar_response,parent,func,argv,nofunc,noargv)
+    infobar_.connect("close",on_infobar_close,parent,infobar)
+    infobar_.connect("response",on_infobar_response,parent,infobar,func,argv,nofunc,noargv)
     if not parent.infobar:
-        parent.set_child(infobar)
+        parent.add_overlay(infobar)
         parent.infobar = infobar
-        infobar.props.revealed = True
-    return infobar
+        infobar_.props.revealed = True
+    return infobar_

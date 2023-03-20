@@ -19,5 +19,8 @@
     <key name="vte" type="b">
       <default>true</default>
     </key>
+    <key name="reveal-flap" type="b">
+      <default>true</default>
+    </key>
   </schema>
 </schemalist>

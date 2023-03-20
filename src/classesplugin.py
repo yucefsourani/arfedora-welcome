@@ -189,7 +189,6 @@ class BasePlugin():
         self.__button_box__ = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=2)
         self.__button__     = Gtk.Button.new()
         self.__button__.props.margin_top = 5
-        self.__button_box__.append(self.__button__)
         self.__button__.set_has_frame(self.___button_frame)
         self.__button__.connect("clicked",self.___clicked)
         
@@ -208,15 +207,16 @@ class BasePlugin():
         
         self.__spinner__     = Gtk.Spinner()
         self.__spinner__.hide()
-        self.__spinner__.set_halign(Gtk.Align.CENTER)
-        self.__button_box__.append(self.__spinner__)
-        
+        self.__spinner__.set_halign(Gtk.Align.CENTER)        
         
         self.__progressbar__ = Gtk.ProgressBar()
         self.__progressbar__.set_show_text(True)
         self.__progressbar__.set_ellipsize(Pango.EllipsizeMode.END)
         self.__progressbar__.hide()
+        
+        self.__button_box__.append(self.__spinner__)
         self.__button_box__.append(self.__progressbar__)
+        self.__button_box__.append(self.__button__)
         #self.__progressbar__.props.hexpand = True
         
         
