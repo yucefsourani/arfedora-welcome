@@ -44,16 +44,12 @@ website              = ("WebSite","https://www.arduino.cc/")
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="arduino.svg",
-                            button_install_label="Install Arduino IDE V2 (Flatpak User wide)",
-                            button_remove_label="Remove Arduino IDE V2 (Flatpak User wide)",
-                            buttontooltip="Install Remove Arduino IDE V2 (Flatpak User wide)",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             waitmsg="Wait...",
@@ -65,7 +61,7 @@ class Plugin(BasePlugin):
                             ifremovesucessmsg="Remove Arduino IDE V2 Done",
                             beforeinstallyesorno="Start Install Arduino IDE V2 ?",
                             beforeremoveyesorno="Start Remove Arduino IDE V2 ?",
-                            expand=False,
+                            parallel_install = False,
                             daemon=True)
 
         self.parent = parent
