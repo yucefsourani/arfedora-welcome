@@ -63,10 +63,6 @@ class MainPage():
         else:
             self.current_flap_button.hide()
 
-    def on_visible_child_name_changed(self,w,property_):
-        box = w.get_child_by_name(w.props.visible_child_name).get_child()
-        box.searchbar.set_search_mode(True)
-        box.searchentry.grab_focus()
         
     def make_flap_button(self):
         self.current_flap_button  = Gtk.ToggleButton.new()
@@ -116,45 +112,21 @@ class MainPage():
                     box  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
                     banner.set_child(box)
                     sw = Gtk.ScrolledWindow.new()
-                    #box.set_hexpand(True)
                     box.set_vexpand(True)
                     listbox = Gtk.ListBox.new()
                     listbox.set_css_classes(["boxed-list"])
                     listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-                    #listbox.set_show_separators(True)
+
                     
                     searchentry = Gtk.SearchEntry.new()
-                    #box.searchentry = searchentry
                     searchlistbox = Gtk.Box.new(orientation = Gtk.Orientation.HORIZONTAL,spacing=0)
                     searchlistbox.props.margin_top    = 10
-                    searchlistbox.set_css_classes(["toolbar"])
                     searchlistbox.set_halign(Gtk.Align.CENTER)
-                    #searchlistbox = Gtk.ListBox.new()
-                    #searchlistbox.set_css_classes(["frame"])
-                    #searchlistbox.set_selection_mode(Gtk.SelectionMode.NONE)
-                    #searchlistbox.set_show_separators(True)
-                    #searchclamp = Adw.Clamp.new()
-                    #searchclamp.props.margin_top    = 10
-                    #searchclamp.props.margin_bottom = 3
-                    #searchclamp.props.margin_start  = 5
-                    #searchclamp.props.margin_end    = 5
-                    #searchclamp.set_maximum_size(500)
-                    #searchclamp.set_child(searchlistbox)
-                    #box.append(searchclamp)
                     box.append(searchlistbox)
                     searchbar     = Gtk.SearchBar.new()
-                    searchbar.set_css_classes(["toolbar"])
-                    #searchbarrow = Adw.ActionRow.new()
-                    #searchbarrow.set_child(searchbar)
-                    #searchbar.set_hexpand(True)
-                    #searchlistbox.append(searchbarrow)
+                    searchbar.set_css_classes(["inline"])
                     searchlistbox.append(searchbar)
-                    #searchbar.props.margin_top    = 3
-                    #searchbar.props.margin_bottom = 3
-                    #searchbar.props.margin_start  = 3
-                    #searchbar.props.margin_end    = 3 
                     #searchbar.set_search_mode(True)
-                    #box.searchbar = searchbar
                     searchbar.connect_entry(searchentry)
                     searchbar.set_child(searchentry)
                     searchbar.set_key_capture_widget(listbox)
@@ -220,7 +192,6 @@ class MainPage():
                     row_box.props.margin_top    = 2
                     row_box.props.margin_bottom = 2
                     row_box.set_css_classes(["linked","flat"])
-                    #row_box.set_homogeneous(True)
                     if plugin.website:
                         link_name    = plugin.website[0]
                         website      = plugin.website[1]
@@ -241,7 +212,6 @@ class MainPage():
                 print(e)
                 print("Ignored >> Load {} Fail.".format(plugin))
                 continue
-        #self.main_stack.connect("notify::visible-child-name",self.on_visible_child_name_changed)
         visible_stack_child = self.parent.app_settings.get_string("navigation-sidebar-visible-stack-child")
         if visible_stack_child in self.all_category.keys():
             l = list(self.all_category.keys()).index(visible_stack_child)
