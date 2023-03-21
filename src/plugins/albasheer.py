@@ -60,7 +60,7 @@ class Plugin(BasePlugin):
                             ifremovesucessmsg="Remove albasheer Done",
                             beforeinstallyesorno="Start Install albasheer ?",
                             beforeremoveyesorno="Start Remove albasheer ?",
-                            parallel_install = True,
+                            parallel_install = False,
                             daemon=True)
 
         self.parent = parent
