@@ -51,6 +51,27 @@ class IconNamePaint(Gtk.Widget):
         else:
             return (self.__h, self.__h, -1, -1)
 
+class ImagePaint(Gtk.Widget):
+    def __init__(self,image_location,w,h):
+        Gtk.Widget.__init__(self)
+
+        self.__w            = w
+        self.__h            = h
+        self.image_location = image_location
+        self.__texture      = Gdk.Texture.new_from_filename(self.image_location)
+
+    def do_snapshot(self,snapshot):
+        self.__texture.snapshot(snapshot,self.__w,self.__h)
+
+    def do_get_request_mode(self):
+        return Gtk.SizeRequestMode.CONSTANT_SIZE
+        
+    def do_measure(self, orientation, for_size):
+        if orientation == Gtk.Orientation.HORIZONTAL:
+            return (self.__w, self.__w, -1, -1)
+        else:
+            return (self.__h, self.__h, -1, -1)
+            
 
 def create_toast(title="",priority=1,button_label="Ok",timeout=0,custom_title=False,action_name=False,action_target=False,infoover=False):
     toast = Adw.Toast.new(title)

@@ -188,22 +188,22 @@ class BasePlugin():
         
         self.__button_box__ = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=2)
         self.__button__     = Gtk.Button.new()
-        self.__button__.props.margin_top = 5
         self.__button__.set_has_frame(self.___button_frame)
         self.__button__.connect("clicked",self.___clicked)
         
         self.__label__ = Gtk.Label.new()
-        self.__label__.set_ellipsize(Pango.EllipsizeMode.END)
+        #self.__label__.set_ellipsize(Pango.EllipsizeMode.END)
         self.__label__.set_justify(Gtk.Justification.CENTER)
         self.__button__.set_child(self.__label__)
+        self.__button_box__.set_valign(Gtk.Align.CENTER)
         try:
-            ___pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(utils.get_image_location(self.___button_image),100,100)
-            self.__image__  = Gtk.Image.new_from_pixbuf(___pixbuf)
+            self.__image__  = gui_widgets.ImagePaint(utils.get_image_location(self.___button_image),40,40)
         except Exception as e:
             print(e)
-            self.__image__   = gui_widgets.IconNamePaint("applications-accessories",100,100,self.___parent)
-        self.__image__.props.margin_top    = 5
-        self.__image__.props.margin_bottom = 5
+            self.__image__   = gui_widgets.IconNamePaint("applications-accessories",20,20,self.___parent)
+        #self.__image__.props.margin_top    = 5
+        self.__image__.set_valign(Gtk.Align.CENTER)
+        #self.__image__.props.margin_bottom = 5
         
         self.__spinner__     = Gtk.Spinner()
         self.__spinner__.hide()

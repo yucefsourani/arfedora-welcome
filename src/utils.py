@@ -31,8 +31,8 @@ css = b"""
   background-color: @success_bg_color;
   color: @accent_fg_color;
 }
-
 """
+
 def get_image_location(image_name):
     location = os.path.join(images_location,image_name)
     if os.path.isfile(location):

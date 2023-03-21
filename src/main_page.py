@@ -112,6 +112,7 @@ class MainPage():
                     box  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
                     banner.set_child(box)
                     sw = Gtk.ScrolledWindow.new()
+                    sw.set_policy( Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
                     box.set_vexpand(True)
                     listbox = Gtk.ListBox.new()
                     listbox.set_css_classes(["boxed-list"])
@@ -178,8 +179,8 @@ class MainPage():
                     plugin_class.__banner__ = banner
                     action_row          = Adw.ExpanderRow.new()
                     action_row.keywords = plugin.keywords
-                    action_row.set_title_lines(2)
-                    action_row.set_subtitle_lines(2)
+                    action_row.set_title_lines(1)
+                    action_row.set_subtitle_lines(4)
                     action_row.add_prefix(plugin_class.__image__)
                     action_row.set_title(plugin.title)
                     action_row.set_subtitle(plugin.subtitle)
@@ -187,6 +188,7 @@ class MainPage():
                     listbox.append(action_row)
                     
                     row_box = Gtk.Box.new(orientation = Gtk.Orientation.HORIZONTAL,spacing=0)
+                    row_box.props.halign  = Gtk.Align.END
                     row_box.props.margin_start  = 5
                     row_box.props.margin_end    = 5
                     row_box.props.margin_top    = 2
@@ -196,14 +198,15 @@ class MainPage():
                         link_name    = plugin.website[0]
                         website      = plugin.website[1]
                         link_button  = Gtk.LinkButton.new_with_label(website,link_name)
-                        link_button.set_css_classes(["wait-action-button"])
+                        link_button.set_name("custom_font_size")
+                        link_button.set_css_classes(["wait-action-button","flat"])
                         row_box.append(link_button)
                     if plugin.licenses:
                         for licenses_info in plugin.licenses:
                             license_type = licenses_info[0]
                             license_web  = licenses_info[1]
                             link_button  = Gtk.LinkButton.new_with_label(license_web,license_type)
-                            link_button.set_css_classes(["running-destructive-action-button"])
+                            link_button.set_css_classes(["running-destructive-action-button","flat"])
                             row_box.append(link_button)
                     action_row.add_row(row_box)
                 del plugin
