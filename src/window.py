@@ -57,60 +57,43 @@ class ArfedoraWelcomeWindow(Adw.ApplicationWindow):
         self.mainbox.props.hexpand = True
         self.mainbox.props.vexpand = True
         self.set_content(self.mainbox)
-        self.current_flap_button      = Gtk.ToggleButton.new()
-        image_ = Gtk.Image.new_from_icon_name("open-menu-symbolic")
-        self.current_flap_button.set_child(image_)
         self.make_header()
 
 
-    def on_visible_child_name_changed(self,w,property_):
-        if w.props.visible_child_name == "mhbox":
-            self.current_flap_button.show()
-        else:
-            self.current_flap_button.hide()
+
             
     def make_header(self):
+        self.header = Adw.HeaderBar.new()
+        self.banner = Gtk.Overlay.new()
+        self.view_switcher_bar = Adw.ViewSwitcherBar.new()
+        self.view_switcher_title = Adw.ViewSwitcherTitle.new()
         self.mainstack = Adw.ViewStack.new()
-        self.mainstack.connect("notify::visible-child-name",self.on_visible_child_name_changed)
         self.mainstack.set_hexpand(True)
         self.mainstack.set_vexpand(True)
 
-        self.mhbox     = MainPage()
-        flap           = self.mhbox.flap
-        self.aboutbox  = AboutPage()
-        self.outputbox = OutPutPage()
 
-
-
-        self.current_flap_button.set_active(flap.props.reveal_flap)
-        self.current_flap_button.bind_property("active",flap, "reveal-flap",GObject.BindingFlags.BIDIRECTIONAL )
-        self.app_settings.bind("reveal-flap", flap, "reveal-flap",
-                           Gio.SettingsBindFlags.DEFAULT)
-
-        self.mainstack.add_titled_with_icon(self.mhbox,"mhbox",_("Main"),"application-x-executable-symbolic")
-        self.mainstack.add_titled_with_icon(self.outputbox,"output",_("Output"),"org.gnome.Logs-symbolic")
-        self.mainstack.add_titled_with_icon(self.aboutbox,"aboutbox",_("About"),"help-about-symbolic")
-
+        self.main_page = MainPage(self)
+        self.aboutbox  = AboutPage(self)
+        self.outputbox = OutPutPage(self)
+        self.mainstack.add_titled_with_icon(self.main_page.mbox,"mhbox",_("Main"),"application-x-executable-symbolic")
+        self.mainstack.add_titled_with_icon(self.outputbox.mbox,"output",_("Output"),"org.gnome.Logs-symbolic")
+        self.mainstack.add_titled_with_icon(self.aboutbox.mbox,"aboutbox",_("About"),"help-about-symbolic")
 
         self.app_settings.bind("visible-stack-child", self.mainstack, "visible-child-name",
                            Gio.SettingsBindFlags.DEFAULT)
-        self.header = Adw.HeaderBar.new()
-        self.header.pack_start(self.current_flap_button)
-
-        self.view_switcher_title = Adw.ViewSwitcherTitle.new()
+        
         self.view_switcher_title.set_stack(self.mainstack)
         self.header.set_title_widget(self.view_switcher_title)
 
-        self.view_switcher_bar = Adw.ViewSwitcherBar.new()
+        
         self.view_switcher_bar.set_stack(self.mainstack)
         
 
         self.mainbox.append(self.header)
-        self.banner = Gtk.Overlay.new()
+        
         self.mainbox.append(self.banner)
         self.mainbox.append(self.mainstack)
         self.mainbox.append(self.view_switcher_bar)
-
         self.view_switcher_title.bind_property("title_visible",self.view_switcher_bar, "reveal",GObject.BindingFlags.DEFAULT )
 
     def quit_(self,window):

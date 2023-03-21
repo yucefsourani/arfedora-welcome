@@ -1,5 +1,5 @@
 from gi.repository import Adw
-from gi.repository import Gtk,GdkPixbuf,Gdk,Gio
+from gi.repository import Gtk,GdkPixbuf,Gdk,Gio,GObject
 from .utils import arch,get_distro_name_like,get_distro_version,get_plugins,load_plugin,display_type,distro_desktop,get_image_location
 from .gui_widgets import IconNamePaint,infooverlay,yes_or_no
 
@@ -8,12 +8,8 @@ HEIGHT = 32
 
 
 class MainPage():
-    def __new__(cls):
-        s = super(MainPage, cls).__new__(cls)
-        s.__init__()
-        return s.mbox
-
-    def __init__(self):
+    def __init__(self,parent):
+        self.parent        = parent
         self.main_overlay  = Gtk.Overlay.new()
         self.mbox     = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=0)
         self.mainbox  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
@@ -25,7 +21,6 @@ class MainPage():
         infooverlay.set_child(self.mainbox)
                 
         self.flap = Adw.Flap.new()
-        self.mbox.flap = self.flap
         self.flap.set_hexpand(True)
         self.flap.set_vexpand(True)
         self.mainbox.append(self.flap)
@@ -44,7 +39,7 @@ class MainPage():
         self.view_switcher_listbox.set_css_classes(["navigation-sidebar","background"])
         self.view_switcher_listbox.set_selection_mode( Gtk.SelectionMode.SINGLE )
         self.view_switcher_listbox.set_activate_on_single_click( True )
-        self.view_switcher_listbox.connect("row-activated",self.on_view_switcher_row_activated)
+        
         #self.view_switcher = Adw.ViewSwitcher.new()
         #self.view_switcher.set_policy(Adw.ViewSwitcherPolicy.WIDE )
         #self.view_switcher.set_hexpand(True)
@@ -55,11 +50,29 @@ class MainPage():
         
         self.flap.set_flap(view_switcher_box)
         self.flap.set_content(self.main_stack)
-        
+        self.make_flap_button()
         self.all_category   = {}
         self.switchcategory = {}
         self.threads        = dict()
         self.loading_all_plugins()
+        
+
+    def on_visible_child_name_changed(self,w,property_):
+        if w.props.visible_child_name == "mhbox":
+            self.current_flap_button.show()
+        else:
+            self.current_flap_button.hide()
+            
+    def make_flap_button(self):
+        self.current_flap_button  = Gtk.ToggleButton.new()
+        image_ = Gtk.Image.new_from_icon_name("open-menu-symbolic")
+        self.current_flap_button.set_child(image_)
+        self.current_flap_button.set_active(self.flap.props.reveal_flap)
+        self.current_flap_button.bind_property("active",self.flap, "reveal-flap",GObject.BindingFlags.BIDIRECTIONAL )
+        self.parent.app_settings.bind("reveal-flap", self.flap, "reveal-flap",
+                           Gio.SettingsBindFlags.DEFAULT)
+        self.parent.header.pack_start(self.current_flap_button)
+        self.parent.mainstack.connect("notify::visible-child-name",self.on_visible_child_name_changed)
         
 
     def on_view_switcher_row_activated(self,list_box, row):
@@ -157,15 +170,19 @@ class MainPage():
                     category_box = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=0)
                     category_box.stack_page_name = plugin.category
                     category_box.set_homogeneous(True)
-                    category_box.props.margin_start  = 3
-                    category_box.props.margin_end    = 3
-                    category_box.props.margin_top    = 3
-                    category_box.props.margin_bottom = 3
                     
                     image = IconNamePaint(plugin.category_icon_theme,25,25,category_box)
+                    image.props.margin_start  = 3
+                    image.props.margin_end    = 3
+                    image.props.margin_top    = 3
+                    image.props.margin_bottom = 1
                     image.props.halign  = Gtk.Align.CENTER
                     category_box.append(image)
                     category_label = Gtk.Label.new()
+                    category_label.props.margin_start  = 3
+                    category_label.props.margin_end    = 3
+                    category_label.props.margin_top    = 1
+                    category_label.props.margin_bottom = 3
                     category_label.add_css_class("caption")
                     category_label.props.hexpand = True
                     category_label.props.halign  = Gtk.Align.CENTER
@@ -212,10 +229,21 @@ class MainPage():
                             row_box.append(link_button)
                     action_row.add_row(row_box)
                 del plugin
+
             except Exception as e:
                 print(e)
                 print("Ignored >> Load {} Fail.".format(plugin))
                 continue
+        visible_stack_child = self.parent.app_settings.get_string("navigation-sidebar-visible-stack-child")
+        if visible_stack_child in self.all_category.keys():
+            l = list(self.all_category.keys()).index(visible_stack_child)
+            self.view_switcher_listbox.select_row(self.view_switcher_listbox.get_row_at_index(l))
+        else:
+            if self.all_category:
+                self.view_switcher_listbox.select_row(self.view_switcher_listbox.get_row_at_index(0))
+        self.parent.app_settings.bind("navigation-sidebar-visible-stack-child", self.main_stack, "visible-child-name",
+                           Gio.SettingsBindFlags.DEFAULT)
+        self.view_switcher_listbox.connect("row-activated",self.on_view_switcher_row_activated)
 
     def on_search_entry_changed(self,searchentry,listbox):
         """The filter_func will be called for each row after the call, 

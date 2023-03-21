@@ -36,13 +36,9 @@ translator_names = [
                 ]
 
 class AboutPage():
-    def __new__(cls):
-        s = super(AboutPage, cls).__new__(cls)
-        s.__init__()
-        return s.mainbox
-
-    def __init__(self):
-        self.mainbox  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
+    def __init__(self,parent):
+        self.parent  = parent
+        self.mbox    = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
 
         viewswitcher_clamp = Adw.Clamp.new()
         viewswitcher_clamp.props.margin_bottom = 15
@@ -52,13 +48,13 @@ class AboutPage():
         viewswitcher_clamp.set_maximum_size(400)
         viewswitcher = Adw.ViewSwitcher.new()
         viewswitcher_clamp.set_child(viewswitcher)
-        self.mainbox.append(viewswitcher_clamp)
+        self.mbox.append(viewswitcher_clamp)
         mainstack = Adw.ViewStack.new()
         viewswitcher.set_css_classes(["wide","linked"])
         viewswitcher.set_stack(mainstack)
         mainstack.props.hexpand = True
         mainstack.props.vexpand = True
-        self.mainbox.append(mainstack)
+        self.mbox.append(mainstack)
 
 
         mainsw = Gtk.ScrolledWindow.new()

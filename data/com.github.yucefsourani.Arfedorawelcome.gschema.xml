@@ -16,6 +16,9 @@
     <key name="visible-stack-child" type="s">
       <default>"mhbox"</default>
     </key>
+    <key name="navigation-sidebar-visible-stack-child" type="s">
+      <default>"Multimedia"</default>
+    </key>
     <key name="vte" type="b">
       <default>true</default>
     </key>

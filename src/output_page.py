@@ -28,20 +28,16 @@ from gi.repository import Gtk,Vte,Gdk
 import sys
 
 class OutPutPage():
-    def __new__(cls):
-        s = super(OutPutPage, cls).__new__(cls)
-        s.__init__()
-        return s.mainbox
-
-    def __init__(self):
-        self.mainbox  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
-        self.mainbox.set_hexpand(True)
-        self.mainbox.set_vexpand(True)
+    def __init__(self,parent):
+        self.parent   = parent
+        self.mbox     = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
+        self.mbox.set_hexpand(True)
+        self.mbox.set_vexpand(True)
         
         tscrolledwindow = Gtk.ScrolledWindow()
         #tscrolledwindow.set_hexpand(True)
         #tscrolledwindow.set_vexpand(True)
-        self.mainbox.append(tscrolledwindow)
+        self.mbox.append(tscrolledwindow)
         tscrolledwindow.set_policy(Gtk.PolicyType.NEVER ,Gtk.PolicyType.AUTOMATIC)
         self.terminal = Vte.Terminal()
         self.terminal.set_hexpand(True)
