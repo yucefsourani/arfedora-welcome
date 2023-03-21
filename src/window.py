@@ -56,7 +56,8 @@ class ArfedoraWelcomeWindow(Adw.ApplicationWindow):
         self.mainbox = Gtk.Box.new(Gtk.Orientation.VERTICAL,0)
         self.mainbox.props.hexpand = True
         self.mainbox.props.vexpand = True
-        self.set_content(self.mainbox)
+        self.banner = Gtk.Overlay.new()
+        self.set_content(self.banner)
         self.make_header()
 
 
@@ -64,7 +65,7 @@ class ArfedoraWelcomeWindow(Adw.ApplicationWindow):
             
     def make_header(self):
         self.header = Adw.HeaderBar.new()
-        self.banner = Gtk.Overlay.new()
+        
         self.view_switcher_bar = Adw.ViewSwitcherBar.new()
         self.view_switcher_title = Adw.ViewSwitcherTitle.new()
         self.mainstack = Adw.ViewStack.new()
@@ -91,7 +92,7 @@ class ArfedoraWelcomeWindow(Adw.ApplicationWindow):
 
         self.mainbox.append(self.header)
         
-        self.mainbox.append(self.banner)
+        self.banner.set_child(self.mainbox)
         self.mainbox.append(self.mainstack)
         self.mainbox.append(self.view_switcher_bar)
         self.view_switcher_title.bind_property("title_visible",self.view_switcher_bar, "reveal",GObject.BindingFlags.DEFAULT )
