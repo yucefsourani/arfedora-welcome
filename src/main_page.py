@@ -57,12 +57,17 @@ class MainPage():
         self.loading_all_plugins()
         
 
-    def on_visible_child_name_changed(self,w,property_):
+    def on_parent_stack_visible_child_name_changed(self,w,property_):
         if w.props.visible_child_name == "mhbox":
             self.current_flap_button.show()
         else:
             self.current_flap_button.hide()
-            
+
+    def on_visible_child_name_changed(self,w,property_):
+        box = w.get_child_by_name(w.props.visible_child_name).get_child()
+        box.searchbar.set_search_mode(True)
+        box.searchentry.grab_focus()
+        
     def make_flap_button(self):
         self.current_flap_button  = Gtk.ToggleButton.new()
         image_ = Gtk.Image.new_from_icon_name("open-menu-symbolic")
@@ -72,7 +77,7 @@ class MainPage():
         self.parent.app_settings.bind("reveal-flap", self.flap, "reveal-flap",
                            Gio.SettingsBindFlags.DEFAULT)
         self.parent.header.pack_start(self.current_flap_button)
-        self.parent.mainstack.connect("notify::visible-child-name",self.on_visible_child_name_changed)
+        self.parent.mainstack.connect("notify::visible-child-name",self.on_parent_stack_visible_child_name_changed)
         
 
     def on_view_switcher_row_activated(self,list_box, row):
@@ -119,6 +124,7 @@ class MainPage():
                     #listbox.set_show_separators(True)
                     
                     searchentry = Gtk.SearchEntry.new()
+                    #box.searchentry = searchentry
                     searchlistbox = Gtk.Box.new(orientation = Gtk.Orientation.HORIZONTAL,spacing=0)
                     searchlistbox.props.margin_top    = 10
                     searchlistbox.set_css_classes(["toolbar"])
@@ -136,7 +142,7 @@ class MainPage():
                     #searchclamp.set_child(searchlistbox)
                     #box.append(searchclamp)
                     box.append(searchlistbox)
-                    searchbar    = Gtk.SearchBar.new()
+                    searchbar     = Gtk.SearchBar.new()
                     searchbar.set_css_classes(["toolbar"])
                     #searchbarrow = Adw.ActionRow.new()
                     #searchbarrow.set_child(searchbar)
@@ -147,7 +153,8 @@ class MainPage():
                     #searchbar.props.margin_bottom = 3
                     #searchbar.props.margin_start  = 3
                     #searchbar.props.margin_end    = 3 
-                    searchbar.set_search_mode(True)
+                    #searchbar.set_search_mode(True)
+                    #box.searchbar = searchbar
                     searchbar.connect_entry(searchentry)
                     searchbar.set_child(searchentry)
                     searchbar.set_key_capture_widget(listbox)
@@ -234,6 +241,7 @@ class MainPage():
                 print(e)
                 print("Ignored >> Load {} Fail.".format(plugin))
                 continue
+        #self.main_stack.connect("notify::visible-child-name",self.on_visible_child_name_changed)
         visible_stack_child = self.parent.app_settings.get_string("navigation-sidebar-visible-stack-child")
         if visible_stack_child in self.all_category.keys():
             l = list(self.all_category.keys()).index(visible_stack_child)
@@ -244,6 +252,7 @@ class MainPage():
         self.parent.app_settings.bind("navigation-sidebar-visible-stack-child", self.main_stack, "visible-child-name",
                            Gio.SettingsBindFlags.DEFAULT)
         self.view_switcher_listbox.connect("row-activated",self.on_view_switcher_row_activated)
+        
 
     def on_search_entry_changed(self,searchentry,listbox):
         """The filter_func will be called for each row after the call, 
