@@ -21,3 +21,16 @@
 ``` meson setup builddir  --prefix /usr &&sudo meson install -C builddir && arfedora-welcome -d ```
 
 
+![Alt text](https://raw.githubusercontent.com/yucefsourani/arfedora-welcome/main/screenshots/Screenshot11.png "Screenshot")
+
+
+![Alt text](https://raw.githubusercontent.com/yucefsourani/arfedora-welcome/main/screenshots/Screenshot12.png "Screenshot")
+
+
+![Alt text](https://raw.githubusercontent.com/yucefsourani/arfedora-welcome/main/screenshots/Screenshot13.png "Screenshot")
+
+
+![Alt text](https://raw.githubusercontent.com/yucefsourani/arfedora-welcome/main/screenshots/Screenshot14.png "Screenshot")
+
+
+![Alt text](https://raw.githubusercontent.com/yucefsourani/arfedora-welcome/main/screenshots/Screenshot15.png "Screenshot")
