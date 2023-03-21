@@ -6,7 +6,7 @@
 
 # Runtime Requires
  
-``` sudo dnf install vte291-gtk4 gettext gtk4 flatpak ```
+``` sudo dnf install vte291-gtk4 gettext gtk4 flatpak libadwaita ```
 
 
 
