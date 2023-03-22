@@ -179,8 +179,11 @@ class MainPage():
                     plugin_class.__banner__ = banner
                     action_row          = Adw.ExpanderRow.new()
                     action_row.keywords = plugin.keywords
-                    action_row.set_title_lines(1)
-                    action_row.set_subtitle_lines(4)
+                    try:
+                        action_row.set_title_lines(1)
+                        action_row.set_subtitle_lines(4)
+                    except:
+                        pass
                     action_row.add_prefix(plugin_class.__image__)
                     action_row.set_title(plugin.title)
                     action_row.set_subtitle(plugin.subtitle)
