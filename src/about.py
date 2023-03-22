@@ -143,7 +143,7 @@ class AboutPage():
             row.set_title_lines(1)
             row.set_subtitle(i[0])
             row.set_subtitle_lines(4)
-            row.set_icon_name("utilities-terminal-symbolic")
+            row.set_icon_name("accessories-text-editor-symbolic")
             #row.set_icon_name("lang-typedef-symbolic")
             developer_listbox.append(row)
 

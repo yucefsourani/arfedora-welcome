@@ -77,7 +77,7 @@ class ArfedoraWelcomeWindow(Adw.ApplicationWindow):
         self.aboutbox  = AboutPage(self)
         self.outputbox = OutPutPage(self)
         self.mainstack.add_titled_with_icon(self.main_page.mbox,"mhbox",_("Main"),"application-x-executable-symbolic")
-        self.mainstack.add_titled_with_icon(self.outputbox.mbox,"output",_("Output"),"org.gnome.Logs-symbolic")
+        self.mainstack.add_titled_with_icon(self.outputbox.mbox,"output",_("Output"),"utilities-terminal-symbolic")
         self.mainstack.add_titled_with_icon(self.aboutbox.mbox,"aboutbox",_("About"),"help-about-symbolic")
 
         self.app_settings.bind("visible-stack-child", self.mainstack, "visible-child-name",
