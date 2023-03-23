@@ -33,6 +33,7 @@ class ArfedoraWelcomeWindow(Adw.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.set_title("Arfedora Welcome")
         self.connect("close-request", self.quit_)
         style_provider = Gtk.CssProvider()
         if (Gtk.get_major_version(), Gtk.get_minor_version()) >= (4, 9):
