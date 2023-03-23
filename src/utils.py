@@ -124,7 +124,6 @@ class DownloadFile(GObject.Object):
         self.__parent       = plugin.parent
         self.__timeout      = timeout
         self.__headers      = headers
-        self.__banner       = self.__parent.banner
         self.break_download = False
         
     def reset(self):
