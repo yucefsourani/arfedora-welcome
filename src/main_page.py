@@ -1,7 +1,9 @@
 from gi.repository import Adw
-from gi.repository import Gtk,GdkPixbuf,Gdk,Gio,GObject
+from gi.repository import Gtk,GdkPixbuf,Gdk,Gio,GObject,Gio
 from .utils import arch,get_distro_name_like,get_distro_version,get_plugins,load_plugin,display_type,distro_desktop,get_image_location
-from .gui_widgets import IconNamePaint,infooverlay,yes_or_no
+from .gui_widgets import IconNamePaint,infooverlay,yes_or_no,IconNamePaint
+import os
+import threading
 
 WIDTH  = 32
 HEIGHT = 32
@@ -54,8 +56,21 @@ class MainPage():
         self.all_category   = {}
         self.switchcategory = {}
         self.threads        = dict()
+        
+        
+        self.installed_apps_info = self.get_all_installed_apps_info()
         self.loading_all_plugins()
         
+    def get_all_installed_apps_info(self):
+        result = dict()
+        for i in Gio.AppInfo.get_all() :
+            if not i.get_is_hidden() and i.has_key("Icon") and i.has_key("Name") and i.has_key("Exec"):
+                filename = os.path.basename(i.props.filename)
+                flatpak  = "flatpak" in i.props.filename
+                if flatpak:
+                    filename = filename+".flatpak"
+                result.setdefault(filename,i)
+        return result
 
     def on_parent_stack_visible_child_name_changed(self,w,property_):
         if w.props.visible_child_name == "mhbox":
@@ -195,6 +210,11 @@ class MainPage():
                     row_box.props.margin_top    = 2
                     row_box.props.margin_bottom = 2
                     row_box.set_css_classes(["linked","flat"])
+                    
+                    type_b = Gtk.Button.new()
+                    type_b.props.label = plugin.type_ 
+                    type_b.set_css_classes(["running-destructive-action-button","flat"])
+                    row_box.append(type_b)
                     if plugin.website:
                         link_name    = plugin.website[0]
                         website      = plugin.website[1]
@@ -209,6 +229,87 @@ class MainPage():
                             link_button  = Gtk.LinkButton.new_with_label(license_web,license_type)
                             link_button.set_css_classes(["running-destructive-action-button","flat"])
                             row_box.append(link_button)
+                    action_row.add_row(row_box)
+                    
+                elif plugin.type_ == "launcher":
+                    for launcher in plugin.desktop_app_info:
+                        if launcher in self.installed_apps_info.keys():
+                            appinfo =  self.installed_apps_info[launcher]
+                            action_row          = Adw.ExpanderRow.new()
+                            action_row.keywords = plugin.keywords
+                            if Adw.get_major_version() == 1 and Adw.get_minor_version() >2:
+                                action_row.set_title_lines(1)
+                                action_row.set_subtitle_lines(4)
+                            image = IconNamePaint(appinfo.get_string("Icon"),40,40,self.parent)
+                            action_row.add_prefix(image)
+                            action_row.set_title(appinfo.get_string("Name"))
+                            comment = appinfo.get_string("Comment")
+                            if comment:
+                                action_row.set_subtitle(comment)
+                            b = Gtk.Button.new()
+                            b.props.label = "Launch"
+                            b.set_valign(Gtk.Align.CENTER)
+                            b.set_css_classes(["suggested-action"])
+                            b.connect("clicked",self.__launcher_button_clicked,appinfo)
+                            action_row.add_action(b)
+                            listbox.append(action_row)
+
+                            row_box = Gtk.Box.new(orientation = Gtk.Orientation.HORIZONTAL,spacing=0)
+                            row_box.props.halign  = Gtk.Align.END
+                            row_box.props.margin_start  = 5
+                            row_box.props.margin_end    = 5
+                            row_box.props.margin_top    = 2
+                            row_box.props.margin_bottom = 2
+                            row_box.set_css_classes(["linked","flat"])
+                            type_b = Gtk.Button.new()
+                            type_b.props.label = plugin.type_ 
+                            type_b.set_css_classes(["running-destructive-action-button","flat"])
+                            row_box.append(type_b)
+                            if plugin.website:
+                                link_name    = plugin.website[0]
+                                website      = plugin.website[1]
+                                link_button  = Gtk.LinkButton.new_with_label(website,link_name)
+                                link_button.set_name("custom_font_size")
+                                link_button.set_css_classes(["wait-action-button","flat"])
+                                row_box.append(link_button)
+                            if plugin.licenses:
+                                for licenses_info in plugin.licenses:
+                                    license_type = licenses_info[0]
+                                    license_web  = licenses_info[1]
+                                    link_button  = Gtk.LinkButton.new_with_label(license_web,license_type)
+                                    link_button.set_css_classes(["running-destructive-action-button","flat"])
+                                    row_box.append(link_button)
+                            action_row.add_row(row_box)
+                elif plugin.type_ == "link":
+                    action_row          = Adw.ExpanderRow.new()
+                    action_row.keywords = plugin.keywords
+                    if Adw.get_major_version() == 1 and Adw.get_minor_version() >2:
+                        action_row.set_title_lines(1)
+                        action_row.set_subtitle_lines(4)
+                    if plugin.icon:
+                        image = ImagePaint(get_image_location(plugin.icon),40,40)
+                    else:
+                        image = IconNamePaint("insert-link-symbolic",40,40,self.parent)
+                    action_row.add_prefix(image)
+                    action_row.set_title(plugin.title)
+                    action_row.set_subtitle(plugin.subtitle)
+                    b = Gtk.LinkButton.new_with_label(plugin.link,"Open Link")
+                    b.set_valign(Gtk.Align.CENTER)
+                    b.set_css_classes(["suggested-action"])
+                    action_row.add_action(b)
+                    listbox.append(action_row)
+                    
+                    row_box = Gtk.Box.new(orientation = Gtk.Orientation.HORIZONTAL,spacing=0)
+                    row_box.props.halign  = Gtk.Align.END
+                    row_box.props.margin_start  = 5
+                    row_box.props.margin_end    = 5
+                    row_box.props.margin_top    = 2
+                    row_box.props.margin_bottom = 2
+                    row_box.set_css_classes(["linked","flat"])
+                    type_b = Gtk.Button.new()
+                    type_b.props.label = plugin.type_ 
+                    type_b.set_css_classes(["running-destructive-action-button","flat"])
+                    row_box.append(type_b)
                     action_row.add_row(row_box)
                 del plugin
 
@@ -227,7 +328,9 @@ class MainPage():
                            Gio.SettingsBindFlags.DEFAULT)
         self.view_switcher_listbox.connect("row-activated",self.on_view_switcher_row_activated)
         
-
+    def __launcher_button_clicked(self,button,appinfo):
+            appinfo.launch()
+        
     def on_search_entry_changed(self,searchentry,listbox):
         """The filter_func will be called for each row after the call, 
         and it will continue to be called each time a row changes (via [method`Gtk`.ListBoxRow.changed]) 

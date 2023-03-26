@@ -200,7 +200,7 @@ class BasePlugin():
             self.__image__  = gui_widgets.ImagePaint(utils.get_image_location(self.___button_image),40,40)
         except Exception as e:
             print(e)
-            self.__image__   = gui_widgets.IconNamePaint("applications-accessories",20,20,self.___parent)
+            self.__image__   = gui_widgets.IconNamePaint("applications-accessories",40,40,self.___parent)
         #self.__image__.props.margin_top    = 5
         self.__image__.set_valign(Gtk.Align.CENTER)
         #self.__image__.props.margin_bottom = 5
