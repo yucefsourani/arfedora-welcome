@@ -242,7 +242,10 @@ class MainPage():
                                 action_row.set_subtitle_lines(4)
                             image = IconNamePaint(appinfo.get_string("Icon"),40,40,self.parent)
                             action_row.add_prefix(image)
-                            action_row.set_title(appinfo.get_string("Name"))
+                            if launcher.endswith(".flatpak"):
+                                action_row.set_title(appinfo.get_string("Name")+" (Flatpak)")
+                            else:
+                                action_row.set_title(appinfo.get_string("Name"))
                             comment = appinfo.get_string("Comment")
                             if comment:
                                 action_row.set_subtitle(comment)
