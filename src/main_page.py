@@ -1,7 +1,7 @@
 from gi.repository import Adw
 from gi.repository import Gtk,GdkPixbuf,Gdk,Gio,GObject,Gio
 from .utils import arch,get_distro_name_like,get_distro_version,get_plugins,load_plugin,display_type,distro_desktop,get_image_location
-from .gui_widgets import IconNamePaint,infooverlay,yes_or_no,IconNamePaint
+from .gui_widgets import IconNamePaint,infooverlay,yes_or_no,ImagePaint
 import os
 import threading
 
