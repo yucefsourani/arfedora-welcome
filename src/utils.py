@@ -117,20 +117,40 @@ class DownloadFile(GObject.Object):
         self.__location     = location
         if not self.__location:
             self.__location = tempfile.gettempdir()
-        self.__progressbar  = plugin.__progressbar__
-        self.__label        = plugin.__label__
-        self.__button       = plugin.__button__
-        self.__runningmsg   = plugin._runningmsg
-        self.__parent       = plugin.parent
-        self.__timeout      = timeout
-        self.__headers      = headers
-        self.break_download = False
+        self.__progressbar       = plugin.__progressbar__
+        self.__label             = plugin.__label__
+        self.__button            = plugin.__button__
+        self.__runningmsg        = plugin._runningmsg
+        self.__parent            = plugin.parent
+        self.__timeout           = timeout
+        self.__headers           = headers
+        self.break_download      = False
+        self.run_task_handler_id = plugin.run_task_handler_id
         
     def reset(self):
         GLib.idle_add(self.__label.set_label,self.__runningmsg)
         GLib.idle_add(self.__button.set_css_classes,["wait-action-button"])
+
+
+    def reset_handler(self):
+        self.__button.set_sensitive(False)
+        self.__button.disconnect(self.bread_handler_id)
+        self.__button.handler_unblock(self.run_task_handler_id)
+        
+    def on_break(self,button):
+        self.break_download = True
+
+    def block_(self):
+        self.__button.handler_block(self.run_task_handler_id)
+        self.connect_to_break()
+        self.__button.set_sensitive(True)
+
+    def connect_to_break(self):
+        self.bread_handler_id = self.__button.connect("clicked",self.on_break)
         
     def start(self):
+        GLib.idle_add(self.block_)
+        
         GLib.idle_add(self.__label.set_label,"Downloading")
         GLib.idle_add(self.__button.set_css_classes,["running-destructive-action-button"])
         return self.check_link()
@@ -145,19 +165,12 @@ class DownloadFile(GObject.Object):
         except Exception as e:
             print(e)
             GLib.idle_add(create_toast,"Download {} Failed.".format(self.__link),1)
+            GLib.idle_add(self.reset_handler)
             self.reset()
             return False
         self.__saveas = os.path.join(self.__location,self.__saveas)
         return self.start_download()
 
-            
-    def on_yes(self):
-        if subprocess.call("rm -rf {}".format(self.__saveas),shell=True) != 0 :
-            GLib.idle_add(create_toast,"Remove {} Failed.".format(self.__saveas),1)
-        else:
-            self.start_download()
-            
-        
     def start_download(self):
         GLib.idle_add(self.__progressbar.show)
         try:
@@ -170,6 +183,7 @@ class DownloadFile(GObject.Object):
                     GLib.idle_add(self.__progressbar.set_text,"Done")
                     GLib.idle_add(self.emit,"done",self.__saveas)
                     GLib.idle_add(self.__progressbar.hide)
+                    GLib.idle_add(self.reset_handler)
                     self.reset()
                     return self.__saveas
                 mode  = "ab"
@@ -193,6 +207,7 @@ class DownloadFile(GObject.Object):
                             pass
                         GLib.idle_add(self.emit,"break",self.__saveas)
                         GLib.idle_add(self.__progressbar.hide)
+                        GLib.idle_add(self.reset_handler)
                         self.reset()
                         return
                     chunk = opurl.read(ch_)
@@ -215,6 +230,7 @@ class DownloadFile(GObject.Object):
             GLib.idle_add(self.__progressbar.set_text,"Fail")
             GLib.idle_add(create_toast,"Download File To {} Failed.".format(self.__saveas),1)
             GLib.idle_add(self.emit,"fail",self.__saveas)
+            GLib.idle_add(self.reset_handler)
             self.reset()
             return False
         finally:
@@ -224,6 +240,7 @@ class DownloadFile(GObject.Object):
             except Exception as e:
                 pass
         GLib.idle_add(self.__progressbar.hide)
+        GLib.idle_add(self.reset_handler)
         self.reset()
         return self.__saveas
         

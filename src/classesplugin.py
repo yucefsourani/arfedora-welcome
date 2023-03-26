@@ -189,7 +189,7 @@ class BasePlugin():
         self.__button_box__ = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=2)
         self.__button__     = Gtk.Button.new()
         self.__button__.set_has_frame(self.___button_frame)
-        self.__button__.connect("clicked",self.___clicked)
+        self.run_task_handler_id = self.__button__.connect("clicked",self.___clicked)
         
         self.__label__ = Gtk.Label.new()
         #self.__label__.set_ellipsize(Pango.EllipsizeMode.END)

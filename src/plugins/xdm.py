@@ -65,7 +65,7 @@ class Plugin(BasePlugin):
                             ifremovesucessmsg="Remove Xdman Done",
                             beforeinstallyesorno="Start Install Xdman ?",
                             beforeremoveyesorno="Start Remove Xdman ?",
-                            parallel_install = True,
+                            parallel_install = False,
                             daemon=True)
 
         self.parent = parent
