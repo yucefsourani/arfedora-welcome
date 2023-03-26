@@ -76,7 +76,9 @@ def get_plugins():
     depl = []
     result = []
     addsitedir(plugins_location)
-    for  module_file in os.listdir(plugins_location):
+    ll = os.listdir(plugins_location)
+    ll.sort()
+    for  module_file in ll:
         if module_file.endswith(".py") and os.path.isfile(os.path.join(plugins_location,module_file)):
             if module_file not in depl:
                 module_name, module_extension = os.path.splitext(module_file)
