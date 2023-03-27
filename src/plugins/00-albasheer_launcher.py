@@ -22,7 +22,7 @@
 #  
 #  
 
-if_true_skip         = False
+if_true_skip         = True  # skip to test 
 type_                = "launcher"
 arch                 = ("all",)
 distro_name          = ("all",)
