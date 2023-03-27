@@ -30,7 +30,7 @@ import os
 if_true_skip         = False
 type_                = "installer"
 arch                 = ("all",)
-distro_name          = ("all",)
+distro_name          = ("fedora",)
 distro_version       = ("all",)
 category             = "Utils"
 category_icon_theme  = "applications-utilities-symbolic"
