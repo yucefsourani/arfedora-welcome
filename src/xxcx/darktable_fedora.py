@@ -37,7 +37,7 @@ desktop_env          = ("all",)
 display_type         = ("all",)
 title                = "Darktable"
 subtitle             = "Organize and develop images from digital cameras"
-keywords             = "darktable animation"
+keywords             = "darktable camera"
 licenses             = (("License\nGPL v3.0+","https://www.gnu.org/licenses/gpl-3.0.html"),)
 website              = ("WebSite","https://www.darktable.org/")
                 
