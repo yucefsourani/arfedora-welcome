@@ -21,35 +21,36 @@
 #  MA 02110-1301, USA.
 #  
 # 
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
 import os
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("fedora",)
+distro_version       = ("all",)
+category             = "Internet"
+category_icon_theme  = "web-browser-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Edge"
+subtitle             = "Introducing the new Microsoft Edge web browser"
+keywords             = "edge"
+licenses             = (("License\nnUNKNOWN","https://www.microsoft.com/en-us/edge?exp=e01&form=MA13FJ"),)
+website              = ("WebSite","https://www.microsoft.com/en-us/edge?exp=e01&form=MA13FJ")
                 
-arch                 = ["x86_64"]
-distro_name          = ["fedora"]
-distro_version       = ["all"]
-category             = "<b>Internet</b>"
-category_icon_theme  = "applications-internet"
+
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="edge.png",
-                            button_install_label="Install Microsoft Edge",
-                            button_remove_label="Remove Microsoft Edge",
-                            buttontooltip="Install Remove Microsoft Edge",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             daemon=True,
@@ -58,7 +59,7 @@ class Plugin(BasePlugin):
                             loadingmsg="Loading...",
                             ifinstallfailmsg="Install Microsoft Edge Failed",
                             ifremovefailmsg="Remove Microsoft Edge Failed",
-                            expand=False)
+                            parallel_install=False)
 
 
     def check(self):
