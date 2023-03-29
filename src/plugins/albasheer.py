@@ -37,7 +37,7 @@ display_type         = ("all",)
 title                = "Albasher"
 subtitle             = "Electronic Quran Browser\n(Flatpak User Wide)"
 keywords             = "quran islam albasheer"
-licenses             = (("License\nGPL V3.0+","https://www.gnu.org/licenses/gpl-3.0.html"),)
+licenses             = (("License\nGPL V3.0","https://www.gnu.org/licenses/gpl-3.0.html"),)
 website              = ("WebSite","https://github.com/yucefsourani/albasheer-electronic-quran-browser")
 
 
