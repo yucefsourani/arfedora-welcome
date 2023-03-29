@@ -21,22 +21,27 @@
 #  MA 02110-1301, USA.
 #  
 #  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome import utils
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
 import os
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
-                
-arch                 = ["all"]
-distro_name          = ["fedora"]
-distro_version       = ["36","37","38"]
-category             = "<b>System</b>"
-category_icon_theme = "applications-system"
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("fedora",)
+distro_version       = ("all",)
+category             = "System"
+category_icon_theme  = "applications-system-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "VirtualBox"
+subtitle             = "Powerful x86 and AMD64/Intel64 virtualization product"
+keywords             = "virtualbox"
+licenses             = (("License\nUNKNOWN","https://www.virtualbox.org/"),)
+website              = ("WebSite","https://www.virtualbox.org/")
+
 
 def issecureboot():
     out = subprocess.Popen("mokutil --sb-state &>/dev/null",shell=True,stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()
@@ -61,16 +66,12 @@ all_package = ["VirtualBox", "akmod-VirtualBox", "VirtualBox-server", "VirtualBo
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="VBox.png",
-                            button_install_label="Install VirtualBox",
-                            button_remove_label="Remove VirtualBox",
-                            buttontooltip="Install Remove VirtualBox",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             daemon=True,
@@ -80,23 +81,23 @@ class Plugin(BasePlugin):
                             ifinstallfailmsg="Install VirtualBox Failed",
                             ifremovefailmsg="Remove VirtualBox Failed",
                             ifinstallsucessmsg=ifinstallsucessmsg,
-                            expand=False)
+                            parallel_install=False)
 
 
         
         
     def check(self):
-        check_package = all([self.check_package(pack) for pack in all_package])
+        check_package = all([utils.check_rpm_package_exists(pack) for pack in all_package])
         return not check_package
         
     def install(self):
-        rpmfusion  = all([ self.check_package(pack) for pack in ["rpmfusion-nonfree-release", "rpmfusion-free-release"]])
-        to_install = [pack for pack in all_package if not self.check_package(pack)] + ["kernel", "kernel-devel", "kernel-headers", "@c-development"]
+        rpmfusion  = all([ utils.check_rpm_package_exists(pack) for pack in ["rpmfusion-nonfree-release", "rpmfusion-free-release"]])
+        to_install = [pack for pack in all_package if not utils.check_rpm_package_exists(pack)] + ["kernel", "kernel-devel", "kernel-headers", "@c-development"]
         to_install = " ".join(to_install)
-        commands = ["dnf remove VirtualBox-5.0 VirtualBox-5.1 VirtualBox-5.2 VirtualBox-5.3 VirtualBox-6.0 VirtualBox-6.1 VirtualBox-6.2 VirtualBox-6.3 VirtualBox-6.4 VirtualBox-6.5 VirtualBox-6.6 --setopt=clean_requirements_on_remove=False \
+        commands = ["dnf remove VirtualBox-5.0 VirtualBox-5.1 VirtualBox-5.2 VirtualBox-5.3 VirtualBox-6.0 VirtualBox-6.1 VirtualBox-6.2 VirtualBox-6.3 VirtualBox-6.4 VirtualBox-6.5 VirtualBox-6.6 VirtualBox-6.7 VirtualBox-6.8 VirtualBox-6.9 --setopt=clean_requirements_on_remove=False \
     --setop=strict=False -y --best","dnf install {} -y --best".format(to_install),"usermod -G vboxusers -a $USER"]
         if not rpmfusion:
-            d_version = self.get_distro_version()
+            d_version = utils.get_distro_version()
             command_to_install_rpmfusion = "dnf install  --best -y --nogpgcheck  \
     http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{}.noarch.rpm \
     http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{}.noarch.rpm".format(d_version,d_version)
@@ -108,24 +109,11 @@ class Plugin(BasePlugin):
         return False
         
     def remove(self):
-        to_remove = " ".join([pack for pack in all_package if self.check_package(pack)])
+        to_remove = " ".join([pack for pack in all_package if utils.check_rpm_package_exists(pack)])
         if subprocess.call("pkexec rpm -v --nodeps -e {}".format(to_remove),shell=True)==0:
             return True
         return False
 
-    def check_package(self,package_name):
-        if subprocess.call("rpm -q {} &>/dev/null".format(package_name),shell=True) == 0:
-            return True
-        return False
-        
-    def get_distro_version(self):
-        result=""
-        if not os.path.isfile("/etc/os-release"):
-            return None
-        with open("/etc/os-release") as myfile:
-            for l in myfile:
-                if l.startswith("VERSION_ID"):
-                    result=l.split("=",1)[1].strip()
-        return result.replace("\"","").replace("'","")
+
 
 
