@@ -40,7 +40,7 @@ title                = "Kde Connect"
 subtitle             = "Files and links. Shared between devices"
 keywords             = "kde connect"
 licenses             = (("License\nGPLv2+","https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html"),)
-website              = ("https://kdeconnect.kde.org/",)
+website              = ("WebSite","https://kdeconnect.kde.org/")
                 
 
 all_package = ["kdeconnectd","kde-connect","kde-connect-libs"]
