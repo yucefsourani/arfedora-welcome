@@ -7,7 +7,6 @@ gnome.compile_resources('arfedora-welcome',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
-  source_dir : 'src'
 )
 
 
