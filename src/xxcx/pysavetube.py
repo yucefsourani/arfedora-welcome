@@ -21,37 +21,36 @@
 #  MA 02110-1301, USA.
 #  
 #  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome import utils
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
-import os
 
-if_true_skip         = False 
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
-                
-arch                 = ["all"]
-distro_name          = ["fedora"]
-distro_version       = ["all"]
-category             = "<b>Multimedia</b>"
-category_icon_theme  = "applications-multimedia"
+if_true_skip         = True # skip
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("fedora",)
+distro_version       = ("all",)
+category             = "Multimedia"
+category_icon_theme  = "applications-multimedia-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Pysavetube"
+subtitle             = "Videos Dowloader"
+keywords             = "video pysavetube"
+licenses             = (("License\nGPL-3.0","https://www.gnu.org/licenses/gpl-3.0.html"),)
+website              = ("WebSite","https://github.com/yucefsourani/pysavetube")
 
 all_package = ["pysavetube"]
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="com.github.yucefsourani.pysavetube.png",
-                            button_install_label="Install pysavetube",
-                            button_remove_label="Remove pysavetube",
-                            buttontooltip="Install Remove pysavetube",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             daemon=True,
@@ -60,17 +59,17 @@ class Plugin(BasePlugin):
                             loadingmsg="Loading...",
                             ifinstallfailmsg="Install pysavetube Failed",
                             ifremovefailmsg="Remove pysavetube Failed",
-                            expand=False)
+                            parallel_install=False)
 
 
         
         
     def check(self):
-        check_package = all([self.check_package(pack) for pack in all_package])
+        check_package = all([utils.check_rpm_package_exists(pack) for pack in all_package])
         return not check_package
         
     def install(self):
-        to_install = [pack for pack in all_package if not self.check_package(pack)]
+        to_install = [pack for pack in all_package if not utils.check_rpm_package_exists(pack)]
         to_install = " ".join(to_install)
         if os.path.isfile("/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:youssefmsourani:pysavetube.repo"):
             commands = ["dnf install {} -y --best".format(to_install)]
@@ -83,13 +82,9 @@ class Plugin(BasePlugin):
         return False
         
     def remove(self):
-        to_remove = " ".join([pack for pack in all_package if self.check_package(pack)])
+        to_remove = " ".join([pack for pack in all_package if utils.check_rpm_package_exists(pack)])
         if subprocess.call("pkexec rpm -v --nodeps -e {}".format(to_remove),shell=True)==0:
             return True
         return False
 
-    def check_package(self,package_name):
-        if subprocess.call("rpm -q {} &>/dev/null".format(package_name),shell=True) == 0:
-            return True
-        return False
         
