@@ -38,7 +38,7 @@ display_type         = ("all",)
 title                = "Edge"
 subtitle             = "Introducing the new Microsoft Edge web browser"
 keywords             = "edge"
-licenses             = (("License\nnUNKNOWN","https://www.microsoft.com/en-us/edge?exp=e01&form=MA13FJ"),)
+licenses             = (("License\nUNKNOWN","https://www.microsoft.com/en-us/edge?exp=e01&form=MA13FJ"),)
 website              = ("WebSite","https://www.microsoft.com/en-us/edge?exp=e01&form=MA13FJ")
                 
 
