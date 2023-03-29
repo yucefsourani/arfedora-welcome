@@ -1,9 +1,5 @@
-desktop_file = i18n.merge_file(
-        input: 'com.github.yucefsourani.Arfedorawelcome.desktop.in',
-       output: 'com.github.yucefsourani.Arfedorawelcome.desktop',
-         type: 'desktop',
-       po_dir: '../po',
-      install: true,
+install_data(
+  'com.github.yucefsourani.Arfedorawelcome.desktop',
   install_dir: join_paths(get_option('datadir'), 'applications')
 )
 
