@@ -38,7 +38,7 @@ display_type         = ("all",)
 title                = "Fritzing"
 subtitle             = "Electronic Design Tool\n(Flatpak User Wide)"
 keywords             = "arduino electronics fritzing"
-licenses             = (("License\nGPL-3.0+","https://www.gnu.org/licenses/gpl-3.0.html"),)
+licenses             = (("License\nLGPL V-3.0+","https://www.gnu.org/licenses/gpl-3.0.html"),)
 website              = ("WebSite","https://fritzing.org/")
 
 
