@@ -1,4 +1,4 @@
-pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), 'arfedora_welcome')
+pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), 'arfedora-welcome')
 moduledir = join_paths(pkgdatadir, 'arfedora_welcome')
 gnome = import('gnome')
 
