@@ -21,35 +21,35 @@
 #  MA 02110-1301, USA.
 #  
 # 
-from universalplugin.uplugin import BasePlugin\
-from utils import get_uniq_name,write_to_tmp
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import time
 import os
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
-                
-arch                 = ["x86_64"]
-distro_name          = ["fedora"]
-distro_version       = ["all"]
-category             = "<b>Internet</b>"
-category_icon_theme  = "applications-internet"
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("fedora",)
+distro_version       = ("all",)
+category             = "Internet"
+category_icon_theme  = "web-browser-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "Vivaldi"
+subtitle             = "Vivaldi web browser"
+keywords             = "vivaldi"
+licenses             = (("License\nnUNKNOWN","https://vivaldi.com/"),)
+website              = ("WebSite","https://vivaldi.com/")
+
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="vivaldi.png",
-                            button_install_label="Install Vivaldi Browser",
-                            button_remove_label="Remove Vivaldi Browser",
-                            buttontooltip="Install Remove Vivaldi Browser",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             daemon=True,
@@ -58,7 +58,7 @@ class Plugin(BasePlugin):
                             loadingmsg="Loading...",
                             ifinstallfailmsg="Install Vivaldi Browser Failed",
                             ifremovefailmsg="Remove Vivaldi Browser Failed",
-                            expand=False)
+                            parallel_install=False)
 
 
     def check(self):
