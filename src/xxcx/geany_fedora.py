@@ -39,7 +39,7 @@ display_type         = ("all",)
 title                = "Geany"
 subtitle             = "A fast and lightweight IDE using GTK3"
 keywords             = "geany"
-licenses             = (("License\nProprietary","https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html"),)
+licenses             = (("License\nGPL-2.0+","https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html"),)
 website              = ("WebSite","https://geany.org/")
 
 all_package = ["geany-themes","geany","xterm"]
