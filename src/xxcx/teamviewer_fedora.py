@@ -1,29 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  teamviewer_fedora.py
-#  
-#  Copyright 2018 youcef sourani <youssef.m.sourani@gmail.com>
-#  
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#  
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#  
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-#  MA 02110-1301, USA.
-#  
-#  
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
 #  xdm.py
 #  
 #  Copyright 2018 youcef sourani <youssef.m.sourani@gmail.com>
@@ -43,41 +20,38 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-#  
-from universalplugin.uplugin import BasePlugin
-from utils import get_uniq_name,write_to_tmp
+#
+from arfedora_welcome import utils
+from arfedora_welcome.classesplugin import BasePlugin
+from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
-import os
-
 
 
 if_true_skip         = False
-if_false_skip        = True
-if_one_true_skip     = [False,False]
-if_all_true_skip     = [True,False]
+type_                = "installer"
+arch                 = ("all",)
+distro_name          = ("fedora",)
+distro_version       = ("all",)
+category             = "Utils"
+category_icon_theme  = "applications-utilities-symbolic"
+desktop_env          = ("all",)
+display_type         = ("all",)
+title                = "TeamViewer"
+subtitle             = "Remote access, control and support software"
+keywords             = "remote desktop teamviewer"
+licenses             = (("License\nProprietary","https://www.teamviewer.com/"),)
+website              = ("WebSite","https://www.teamviewer.com/")
                 
-arch                 = ["all"]
-distro_name          = ["fedora"]
-distro_version       = ["all"]
-category             = "<b>Utils</b>"
-category_icon_theme  = "preferences-other"
-
-
-
 
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
-    def __init__(self,parent):
+    def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
-                            spacing=2,
-                            margin=10,
+                            threads=threads,
                             button_image="Team_Viewer.png",
-                            button_install_label="Install TeamViewer",
-                            button_remove_label="Remove TeamViewer",
-                            buttontooltip="Install Remove TeamViewer",
-                            buttonsizewidth=100,
-                            buttonsizeheight=100,
+                            button_install_label="Install ",
+                            button_remove_label="Remove",
                             button_frame=False,
                             blockparent=False,
                             waitmsg="Wait...",
@@ -89,13 +63,13 @@ class Plugin(BasePlugin):
                             ifremovesucessmsg="Remove TeamViewer Done",
                             beforeinstallyesorno="Start Install TeamViewer ?",
                             beforeremoveyesorno="Start Remove TeamViewer ?",
-                            expand=False,
+                            parallel_install=False,
                             daemon=True)
 
 
         
     def check(self):
-        return not self.check_package("teamviewer")
+        return not  utils.check_rpm_package_exists("teamviewer")
         
     def install(self):
         arch = os.uname().machine
@@ -114,7 +88,4 @@ class Plugin(BasePlugin):
             return False
         return True
 
-    def check_package(self,package_name):
-        if subprocess.call("rpm -q {} &>/dev/null".format(package_name),shell=True) == 0:
-            return True
-        return False
+
