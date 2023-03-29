@@ -4,18 +4,11 @@ install_data(
 )
 
 
-appstream_file = i18n.merge_file(
-        input: 'com.github.yucefsourani.Arfedorawelcome.appdata.xml.in',
-       output: 'com.github.yucefsourani.Arfedorawelcome.appdata.xml',
-       po_dir: '../po',
-      install: true,
+install_data(
+  'com.github.yucefsourani.Arfedorawelcome.appdata.xml',
   install_dir: join_paths(get_option('datadir'), 'appdata')
 )
 
-appstream_util = find_program('appstream-util', required: false)
-if appstream_util.found()
-  test('Validate appstream file', appstream_util, args: ['validate', appstream_file])
-endif
 
 install_data('com.github.yucefsourani.Arfedorawelcome.gschema.xml',
   install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
