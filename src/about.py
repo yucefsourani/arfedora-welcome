@@ -31,9 +31,7 @@ developer_names = [
                  ["yucef mouhammad nazih  sourani","https://github.com/yucefsourani"]
                 ]
 
-translator_names = [
-                 ["Arabic\n -yucef mouhammad nazih  sourani","https://github.com/yucefsourani"]
-                ]
+translator_names = []
 
 class AboutPage():
     def __init__(self,parent):
@@ -58,7 +56,7 @@ class AboutPage():
 
 
         mainsw = Gtk.ScrolledWindow.new()
-        mainstack.add_titled_with_icon(mainsw,"info",_("Info"),"dialog-information-symbolic")
+        mainstack.add_titled_with_icon(mainsw,"info","Info","dialog-information-symbolic")
         mainsw.set_policy( Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         box  = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=5)
         mainsw.set_child(box)
@@ -91,7 +89,7 @@ class AboutPage():
         version.add_css_class("pill")
         version.add_css_class("accent")
         box.append(versionbox)
-        website_b =  Gtk.LinkButton.new_with_label(app_website,_("Website"))
+        website_b =  Gtk.LinkButton.new_with_label(app_website,"Website")
         box.append(website_b)
 
         license_b =  Gtk.LinkButton.new_with_label(*app_license)
@@ -116,7 +114,7 @@ class AboutPage():
 
         #################################################################################################
         greditssw = Gtk.ScrolledWindow.new()
-        mainstack.add_titled_with_icon(greditssw,"gredits",_("Gredits"),"applications-science-symbolic")
+        mainstack.add_titled_with_icon(greditssw,"gredits","Gredits","applications-science-symbolic")
 
         greditsbox = Gtk.Box.new(orientation = Gtk.Orientation.VERTICAL,spacing=20)
         greditssw.set_child(greditsbox)
@@ -138,8 +136,8 @@ class AboutPage():
 
         for i in developer_names:
             row =  Adw.ActionRow.new()
-            row.add_suffix( Gtk.LinkButton.new_with_label(i[1],_("Website")))
-            row.set_title(_("Developers"))
+            row.add_suffix( Gtk.LinkButton.new_with_label(i[1],"Website"))
+            row.set_title("Developers")
             row.set_title_lines(1)
             row.set_subtitle(i[0])
             row.set_subtitle_lines(4)
@@ -165,8 +163,8 @@ class AboutPage():
 
         for i in translator_names:
             row =  Adw.ActionRow.new()
-            row.add_suffix( Gtk.LinkButton.new_with_label(i[1],_("Website")))
-            row.set_title(_("Translators"))
+            row.add_suffix( Gtk.LinkButton.new_with_label(i[1],"Website"))
+            row.set_title("Translators")
             row.set_title_lines(1)
             row.set_subtitle(i[0])
             row.set_subtitle_lines(4)

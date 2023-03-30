@@ -1,6 +1,6 @@
 pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), 'arfedora-welcome')
 moduledir = join_paths(pkgdatadir, 'arfedora_welcome')
-gnome = import('gnome')
+
 
 
 python = import('python')
@@ -8,7 +8,6 @@ python = import('python')
 conf = configuration_data()
 conf.set('PYTHON', python.find_installation('python3').path())
 conf.set('VERSION', meson.project_version())
-conf.set('localedir', join_paths(get_option('prefix'), get_option('localedir')))
 conf.set('pkgdatadir', pkgdatadir)
 
 configure_file(

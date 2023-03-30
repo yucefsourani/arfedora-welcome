@@ -1,6 +1,5 @@
 import os
 import sys
-import gettext
 from site import addsitedir
 import importlib
 import tempfile

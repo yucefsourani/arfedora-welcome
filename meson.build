@@ -4,10 +4,9 @@ project('arfedora-welcome',
   default_options: [ 'warning_level=2', 'werror=false', ],
 )
 
-i18n = import('i18n')
 
 
 subdir('data')
 subdir('src')
-subdir('po')
+
 
