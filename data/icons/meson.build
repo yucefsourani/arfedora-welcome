@@ -15,7 +15,7 @@ install_data(
 
 install_data(
   join_paths('hicolor', 'com.github.yucefsourani.Arfedorawelcome.png'),
-  install_dir: join_paths(get_option('datadir'), 'pixmaps', symbolic_dir)
+  install_dir: join_paths(get_option('datadir'), 'pixmaps')
 )
 
 allsize = ['8','16','22','24','32','36','42','64','72','96','128','256','512']

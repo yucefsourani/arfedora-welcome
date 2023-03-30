@@ -45,8 +45,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/applications/*
 %{_datadir}/arfedora-welcome/plugins/*
 %{_datadir}/arfedora-welcome/images/*
+%{_datadir}/arfedora-welcome/arfedora_welcome/*
 %{_datadir}/pixmaps/*
 %{_datadir}/icons/hicolor/*/apps/*
+%{_datadir}/appdata/com.github.yucefsourani.Arfedorawelcome.appdata.xml
+%{_datadir}/glib-2.0/schemas/com.github.yucefsourani.Arfedorawelcome.gschema.xml
 
 
 
