@@ -27,7 +27,6 @@ import threading
 
 
 
-@Gtk.Template(resource_path='/com/github/yucefsourani/Arfedorawelcome/window.ui')
 class ArfedoraWelcomeWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'ArfedoraWelcomeWindow'
 

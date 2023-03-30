@@ -2,14 +2,6 @@ pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), 'arfedora-w
 moduledir = join_paths(pkgdatadir, 'arfedora_welcome')
 gnome = import('gnome')
 
-gnome.compile_resources('arfedora-welcome',
-  'arfedora-welcome.gresource.xml',
-  gresource_bundle: true,
-  install: true,
-  install_dir: pkgdatadir,
-)
-
-
 
 python = import('python')
 
