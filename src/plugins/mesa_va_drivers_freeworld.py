@@ -36,7 +36,7 @@ category             = "Multimedia"
 category_icon_theme  = "applications-multimedia-symbolic"
 desktop_env          = ("all",)
 display_type         = ("all",)
-title                = "Mesa vdpau drivers(AMD)"
+title                = "Mesa va drivers(INTEL)"
 subtitle             = "(freeworld) Drivers contains video acceleration codecs for decoding/encoding H.264 and H.265"
 keywords             = "mesa driver"
 licenses             = (("License\nUNKNOWN",""),)
@@ -57,23 +57,23 @@ class Plugin(BasePlugin):
                             waitmsg="Wait...",
                             runningmsg="Running...",
                             loadingmsg="Loading...",
-                            ifinstallfailmsg="Install Mesa vdpau drivers freeworld Failed",
-                            ifremovefailmsg="Remove Mesa vdpau drivers freeworld Failed",
+                            ifinstallfailmsg="Install Mesa va drivers freeworld Failed",
+                            ifremovefailmsg="Remove Mesa va drivers freeworld Failed",
                             parallel_install=False)
 
 
         
         
     def check(self):
-        return  not utils.check_rpm_package_exists("mesa-vdpau-drivers-freeworld") 
+        return  not utils.check_rpm_package_exists("mesa-va-drivers-freeworld") 
         
     def install(self):
         rpmfusion  = all([ utils.check_rpm_package_exists(pack) for pack in ["rpmfusion-nonfree-release", "rpmfusion-free-release"]])
         
         if utils.check_rpm_package_exists("mesa-va-drivers"):
-            commands = ["dnf swap  mesa-va-drivers mesa-vdpau-drivers-freeworld -y --best"]
+            commands = ["dnf swap  mesa-va-drivers mesa-va-drivers-freeworld -y --best"]
         else:
-            commands = ["dnf install  mesa-vdpau-drivers-freeworld -y --best"]
+            commands = ["dnf install  mesa-va-drivers-freeworld  -y --best"]
 
         if not rpmfusion:
             d_version = utils.get_distro_version()
@@ -88,11 +88,10 @@ class Plugin(BasePlugin):
         return False
         
     def remove(self):
-        if utils.check_rpm_package_exists("mesa-va-drivers-freeworld"):
-            result = subprocess.call("pkexec rpm -v --nodeps -e mesa-vdpau-drivers-freeworld",shell=True)
+        if utils.check_rpm_package_exists("mesa-vdpau-drivers-freeworld"):
+            result = subprocess.call("pkexec rpm -v --nodeps -e mesa-va-drivers-freeworld",shell=True)
         else:
-            result = subprocess.call("pkexec dnf swap mesa-vdpau-drivers-freeworld mesa-va-drivers  -y --best",shell=True)
+            result = subprocess.call("pkexec dnf swap mesa-va-drivers-freeworld mesa-va-drivers  -y --best",shell=True)
         if result==0:
             return True
         return False
-
