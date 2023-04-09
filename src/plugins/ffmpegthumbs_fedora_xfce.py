@@ -26,7 +26,7 @@ from arfedora_welcome.classesplugin import BasePlugin
 from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
 
-if_true_skip         = False# "xfce" not in utils.distro_desktop # if not xfce skip
+if_true_skip         = "xfce" not in utils.distro_desktop # if not xfce skip
 type_                = "installer"
 arch                 = ("all",)
 distro_name          = ("fedora",)
