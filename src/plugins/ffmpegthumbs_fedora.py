@@ -26,7 +26,7 @@ from arfedora_welcome.classesplugin import BasePlugin
 from arfedora_welcome.utils import get_uniq_name,write_to_tmp
 import subprocess
 
-if_true_skip         = "gnome" in utils.distro_desktop # if gnome skip
+if_true_skip         = "plasma" not in utils.distro_desktop # if not kde skip
 type_                = "installer"
 arch                 = ("all",)
 distro_name          = ("fedora",)
@@ -37,7 +37,7 @@ desktop_env          = ("all",)
 display_type         = ("all",)
 title                = "Video thumbnails"
 subtitle             = "File Manager video thumbnails"
-keywords             = "audio record audacity"
+keywords             = "dolphin kde"
 licenses             = (("License\nUNKNOWN",""),)
 website              = ()
 
