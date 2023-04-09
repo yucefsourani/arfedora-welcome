@@ -91,6 +91,12 @@ class Plugin(BasePlugin):
         to_install = [pack for pack in all_package_to_install if not utils.check_rpm_package_exists(pack)]
         to_install = " ".join(to_install)
         commands = ["dnf install {} -y --best".format(to_install)]
+        to_remove = ""
+        for p in (" ffmpeg-free ", " libavcodec-free ", " libavdevice-free ", " libavfilter-free ", " libavformat-free " ," libavutil-free ", " libpostproc-free ", " libswresample-free ", " libswscale-free ") :
+            if utils.check_rpm_package_exists(p):
+                to_remove += p
+        if to_remove:
+            commands.insert(0,"rpm -v --nodeps -e {}".format(to_remove))
         if not rpmfusion:
             d_version = utils.get_distro_version()
             command_to_install_rpmfusion = "dnf install  --best -y --nogpgcheck  \
