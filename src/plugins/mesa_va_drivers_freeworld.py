@@ -88,10 +88,7 @@ class Plugin(BasePlugin):
         return False
         
     def remove(self):
-        if utils.check_rpm_package_exists("mesa-vdpau-drivers-freeworld"):
-            result = subprocess.call("pkexec rpm -v --nodeps -e mesa-va-drivers-freeworld",shell=True)
-        else:
-            result = subprocess.call("pkexec dnf swap mesa-va-drivers-freeworld mesa-va-drivers  -y --best",shell=True)
+        result = subprocess.call("pkexec dnf swap mesa-va-drivers-freeworld mesa-va-drivers  -y --best",shell=True)
         if result==0:
             return True
         return False
