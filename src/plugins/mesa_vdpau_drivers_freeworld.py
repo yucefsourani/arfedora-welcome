@@ -70,8 +70,8 @@ class Plugin(BasePlugin):
     def install(self):
         rpmfusion  = all([ utils.check_rpm_package_exists(pack) for pack in ["rpmfusion-nonfree-release", "rpmfusion-free-release"]])
         
-        if utils.check_rpm_package_exists("mesa-va-drivers"):
-            commands = ["dnf swap  mesa-va-drivers mesa-vdpau-drivers-freeworld -y --best"]
+        if utils.check_rpm_package_exists("mesa-vdpau-drivers"):
+            commands = ["dnf swap  mesa-vdpau-drivers mesa-vdpau-drivers-freeworld -y --best"]
         else:
             commands = ["dnf install  mesa-vdpau-drivers-freeworld -y --best"]
 
@@ -88,10 +88,7 @@ class Plugin(BasePlugin):
         return False
         
     def remove(self):
-        if utils.check_rpm_package_exists("mesa-va-drivers-freeworld"):
-            result = subprocess.call("pkexec rpm -v --nodeps -e mesa-vdpau-drivers-freeworld",shell=True)
-        else:
-            result = subprocess.call("pkexec dnf swap mesa-vdpau-drivers-freeworld mesa-va-drivers  -y --best",shell=True)
+        result = subprocess.call("pkexec dnf swap mesa-vdpau-drivers-freeworld mesa-vdpau-drivers  -y --best",shell=True)
         if result==0:
             return True
         return False
