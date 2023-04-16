@@ -18,7 +18,7 @@ install_data(
   install_dir: join_paths(get_option('datadir'), 'pixmaps')
 )
 
-allsize = ['128x128', '16x16', '192x192', '20x20', '22x22', '24x24', '256x256', '32x32', '36x36', '40x40', '42x42', '48x48', '512x512', '64x64', '72x72', '8x8', '96x96']
+allsize = ['128', '16', '192', '20', '22', '24', '256', '32', '36', '40', '42', '48', '512', '64', '72', '8', '96']
 foreach size : allsize
     icon_dir = join_paths('hicolor', ('@0@x@1@').format(size,size), 'apps')
     install_data(
