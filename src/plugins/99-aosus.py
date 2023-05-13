@@ -22,7 +22,7 @@
 #  
 #  
 
-if_true_skip         = False
+if_true_skip         = False  
 type_                = "link"
 arch                 = ("all",)
 distro_name          = ("all",)
@@ -31,8 +31,8 @@ category             = "WebSites"
 category_icon_theme  = "insert-link-symbolic"
 desktop_env          = ("all",)
 display_type         = ("all",)
-keywords             = "blog arfedora"
-title                = "Arfedora Blog"
-subtitle             = "Arabic Blog For Fedora Linux"
-link                 = "https://arfedora.blogspot.com"
-icon                 = ""
+keywords             = "blog aosus"
+title                = "aosus"
+subtitle             = "مجتمع أسس يهدف لنشر وإثراء ثقافة البرمجيات الحرة والمفتوحة في العالم العربي"
+link                 = "https://aosus.org/"
+icon                 = "aosus.png"
