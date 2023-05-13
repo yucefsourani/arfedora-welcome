@@ -1,6 +1,6 @@
 Name:           arfedora-welcome
 Version:        1.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        makes it easy to install software in Fedora
 Obsoletes:      luniversalinstaller
 Provides:       luniversalinstaller
@@ -54,6 +54,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat May 13 2023 yucuf sourani <youssef.m.sourani@gmail.com> 1.0-5
+- Release 5
+- Add links section
+- Add mpv plugin
+
 * Tue Apr 11 2023 yucuf sourani <youssef.m.sourani@gmail.com> 1.0-4
 - Release 4
 
