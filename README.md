@@ -1,4 +1,4 @@
-# For Fedora Linux Only (Tested on Fedora 38 beta)
+# For Fedora Linux Only 
 
  
 
