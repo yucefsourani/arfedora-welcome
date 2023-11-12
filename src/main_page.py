@@ -189,7 +189,7 @@ class MainPage():
                     self.all_category.setdefault(plugin.category,[listbox,banner])
                 else:
                     listbox,banner =  self.all_category[plugin.category]
-                if plugin.type_ == "installer" or plugin.type_ == "Enable/Disable" or plugin.type_ == "On/Off":
+                if plugin.type_ == "installer" or plugin.type_ == "Enable/Disable" or plugin.type_ == "On/Off" or plugin.type_ == "Oneshot":
                     plugin_class = plugin.Plugin(parent=self.mainbox,threads=self.threads)
                     plugin_class.__banner__ = banner
                     action_row          = Adw.ExpanderRow.new()
