@@ -101,8 +101,8 @@ class Plugin(BasePlugin):
         commands.append(install_file)
         to_run = write_to_tmp(commands)
         if subprocess.call("pkexec bash  {}".format(to_run),shell=True)==0:
-            return False
-        return True
+            return True
+        return False
         
     def remove(self):
         commands = ["chmod 755 /opt/xdman/uninstall.sh", "/opt/xdman/uninstall.sh"]
