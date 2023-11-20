@@ -1,6 +1,6 @@
 Name:           arfedora-welcome
 Version:        1.0
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        makes it easy to install software in Fedora
 Obsoletes:      luniversalinstaller
 Provides:       luniversalinstaller
@@ -22,6 +22,7 @@ Requires:       vte291-gtk4
 Requires:       gettext
 Requires:       libadwaita
 Requires:       mokutil
+Requires:       python3-dnf
 
 %description
 Makes it easy to install software in Fedora.
@@ -54,6 +55,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov 20 2023 yucuf sourani <youssef.m.sourani@gmail.com> 1.0-10
+- Release 10
+- Add Dnf Plugin
+- Fix running in gnome xorg
+
 * Tue Nov 14 2023 yucuf sourani <youssef.m.sourani@gmail.com> 1.0-9
 - Release 9
 - Add Gimp Beta

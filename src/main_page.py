@@ -108,13 +108,13 @@ class MainPage():
                 if plugin.if_true_skip:
                     continue
                 if "all" not in plugin.desktop_env:
-                    if distro_desktop not in plugin.desktop_env:
-                        contine
+                    if  distro_desktop  not in plugin.desktop_env:
+                        continue
                 if "all" not in plugin.display_type:
-                    if display_type not in plugin.display_type:
-                        contine
+                    if  display_type not in plugin.display_type :
+                        continue
                 if "all" not in plugin.arch:
-                    if arch not in plugin.arch:
+                    if  arch not in plugin.arch:
                         continue
                 if "all" not in plugin.distro_name:
                     if not any([i for i in plugin.distro_name if i in distro_name]):
@@ -314,6 +314,8 @@ class MainPage():
                     type_b.set_css_classes(["running-destructive-action-button","flat"])
                     row_box.append(type_b)
                     action_row.add_row(row_box)
+                elif plugin.type_ == "page":
+                    plugin.create_rows(listbox,box,sw,searchlistbox)
                 del plugin
 
             except Exception as e:
@@ -347,3 +349,4 @@ class MainPage():
         if text_to_search.lower() in row.keywords: 
             return True # if True Show row
         return False 
+
