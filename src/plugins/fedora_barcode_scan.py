@@ -7,7 +7,7 @@ import dbus
 from dbus.mainloop.glib import DBusGMainLoop
 import os
 
-
+# Requires packages gstreamer1-plugins-bad-free-zbar    gstreamer1-plugin-gtk4 (in fedora 39 repos)
 if_true_skip         = False
 type_                = "page"
 arch                 = ("all",)
