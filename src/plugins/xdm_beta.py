@@ -70,7 +70,7 @@ class Plugin(BasePlugin):
         return not subprocess.call("rpm -q xdman_gtk",shell=True) == 0
         
     def install(self):
-        link_pro = "https://github.com/subhra74/xdm/releases/download/8.0.26/xdman_gtk-8.0.29-1.fc36.x86_64.rpm"
+        link_pro = "https://github.com/subhra74/xdm/releases/download/8.0.29/xdman_gtk-8.0.29-1.fc36.x86_64.rpm"
         commands = []
         if os.path.isfile("/opt/xdman/uninstall.sh"):
             print("Remove Old Version")
