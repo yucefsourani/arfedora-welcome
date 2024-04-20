@@ -55,8 +55,10 @@ all_package_to_remove = [ 'kacst-art-fonts', 'kacst-book-fonts',
                           'google-noto-sans-arabic-fonts', 
                           'google-noto-naskh-arabic-fonts', 
                           'google-noto-naskh-arabic-ui-fonts', 
-                          'google-noto-sans-old-south-arabian-fonts']
-
+                          'google-noto-sans-old-south-arabian-fonts',
+                          'amiri-quran-fonts',
+                          'amiri-fonts',
+                          'amiri-quran-colored-fonts']
 
 all_package_to_install = ['dejavu-sans-fonts', 'dejavu-sans-mono-fonts',
                           'kacst-art-fonts', 'kacst-book-fonts',
@@ -73,7 +75,10 @@ all_package_to_install = ['dejavu-sans-fonts', 'dejavu-sans-mono-fonts',
                           'google-noto-sans-arabic-fonts', 
                           'google-noto-naskh-arabic-fonts', 
                           'google-noto-naskh-arabic-ui-fonts', 
-                          'google-noto-sans-old-south-arabian-fonts']
+                          'google-noto-sans-old-south-arabian-fonts',
+                          'amiri-quran-fonts',
+                          'amiri-fonts',
+                          'amiri-quran-colored-fonts']
                
 
 
