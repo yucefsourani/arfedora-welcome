@@ -42,7 +42,7 @@ licenses             = (("License\nGPL-2.0+","https://www.gnu.org/licenses/old-l
 website              = ("WebSite","https://www.videolan.org/vlc/")
                 
   
-all_package = ["vlc","vlc-core"]
+all_package = ["vlc","vlc-cli"]
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
