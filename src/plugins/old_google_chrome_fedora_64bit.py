@@ -30,7 +30,7 @@ if_true_skip         = False
 type_                = "installer"
 arch                 = ("x86_64",)
 distro_name          = ("fedora",)
-distro_version       = ("41","42","43","44","45","46")
+distro_version       = ("35","36","37","38","39","40")
 category             = "Internet"
 category_icon_theme  = "web-browser-symbolic"
 desktop_env          = ("all",)
@@ -66,10 +66,10 @@ class Plugin(BasePlugin):
         
     def install(self):
         if os.path.isfile("/etc/yum.repos.d/google-chrome.repo"):
-            commands = ["dnf config-manager setopt google-chrome.enabled=1","dnf install google-chrome-stable -y --best"]
+            commands = ["dnf config-manager --set-enabled google-chrome","dnf install google-chrome-stable -y --best"]
         else:
             commands = ["echo -e '[google-chrome]\nname=google-chrome\nbaseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64\nenabled=1\ngpgcheck=1\ngpgkey=https://dl.google.com/linux/linux_signing_key.pub' > /etc/yum.repos.d/google-chrome.repo",
-            "dnf config-manager setopt google-chrome.enabled=1",
+            "dnf config-manager --set-enabled google-chrome",
             "dnf install google-chrome-stable -y --best"]
         to_run = write_to_tmp(commands)
         if subprocess.call("pkexec bash  {}".format(to_run),shell=True)==0:

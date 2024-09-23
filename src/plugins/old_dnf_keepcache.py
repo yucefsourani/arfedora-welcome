@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  dnf_fastestmirror.py
+#  dnf_keepcache.py
 #  
 #  Copyright 2018 youcef sourani <youssef.m.sourani@gmail.com>
 #  
@@ -30,13 +30,13 @@ if_true_skip         = False
 type_                = "Enable/Disable"
 arch                 = ("all",)
 distro_name          = ("fedora",)
-distro_version       = ("41","42","43","44","45","46")
+distro_version       = ("35","36","37","38","39","40")
 category             = "Utils"
 category_icon_theme  = "applications-utilities-symbolic"
 desktop_env          = ("all",)
 display_type         = ("all",)
-title                = "Dnf Fastestmirror"
-subtitle             = "Dnf Enable/Disable Fastestmirror"
+title                = "Dnf Keepcache"
+subtitle             = "Dnf Enable/Disable keepcache"
 keywords             = "dnf"
 licenses             = ()
 website              = ()
@@ -50,7 +50,7 @@ class Plugin(BasePlugin):
     def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
                             threads=threads,
-                            button_image="rpm-1-320x320.png",
+                            button_image="rpm.svg",
                             button_install_label="Enable",
                             button_remove_label="Disable",
                             button_frame=False,
@@ -63,19 +63,19 @@ class Plugin(BasePlugin):
 
 
     def check(self):
-        check = subprocess.check_output("dnf --dump-main-config | grep fastestmirror |cut -f2- -d \"=\"",shell=True).strip().decode("utf-8")
+        check = subprocess.check_output("dnf config-manager --dump | grep keepcache |cut -f2- -d \"=\"",shell=True).strip().decode("utf-8")
         if check in true:
             return False
         return True
 
         
     def install(self):
-        if subprocess.call("pkexec dnf config-manager setopt fastestmirror=1",shell=True)==0:
+        if subprocess.call("pkexec dnf config-manager --setopt=keepcache=True --save",shell=True)==0:
             return True
         return False
         
     def remove(self):
-        if subprocess.call("pkexec dnf config-manager setopt fastestmirror=0",shell=True)==0:
+        if subprocess.call("pkexec dnf config-manager --setopt=keepcache=False --save",shell=True)==0:
             return True
         return False
 

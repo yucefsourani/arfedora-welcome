@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  google_chrome_fedora_64bit.py
+#  vivaldi.py
 #  
-#  Copyright 2018 youcef sourani <youssef.m.sourani@gmail.com>
+#  Copyright 2020 youcef sourani <youssef.m.sourani@gmail.com>
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -30,16 +30,16 @@ if_true_skip         = False
 type_                = "installer"
 arch                 = ("x86_64",)
 distro_name          = ("fedora",)
-distro_version       = ("41","42","43","44","45","46")
+distro_version       = ("35","36","37","38","39","40")
 category             = "Internet"
 category_icon_theme  = "web-browser-symbolic"
 desktop_env          = ("all",)
 display_type         = ("all",)
-title                = "Google Chrome"
-subtitle             = "Google Chrome Web Browser"
-keywords             = "chrome google browser"
-licenses             = (("License\nUNKNOWN","https://www.google.com/chrome"),)
-website              = ("WebSite","https://www.google.com/chrome")
+title                = "Brave"
+subtitle             = "Brave Web Browser"
+keywords             = "brave browser"
+licenses             = (("License\nUNKNOWN","https://brave.com/terms-of-use/"),)
+website              = ("WebSite","https://brave.com/")
                 
 
 class Plugin(BasePlugin):
@@ -47,7 +47,7 @@ class Plugin(BasePlugin):
     def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
                             threads=threads,
-                            button_image="Chrome.png",
+                            button_image="brave.png",
                             button_install_label="Install",
                             button_remove_label="Remove",
                             button_frame=False,
@@ -56,28 +56,28 @@ class Plugin(BasePlugin):
                             waitmsg="Wait...",
                             runningmsg="Running...",
                             loadingmsg="Loading...",
-                            ifinstallfailmsg="Install Google Chrome Failed",
-                            ifremovefailmsg="Remove Google Chrome Failed",
+                            ifinstallfailmsg="Install Brave Browser Failed",
+                            ifremovefailmsg="Remove Brave Browser Failed",
                             parallel_install=False)
 
 
     def check(self):
-        return not os.path.isfile("/usr/bin/google-chrome")
+        return not os.path.isfile("/usr/bin/brave-browser-stable")
         
     def install(self):
-        if os.path.isfile("/etc/yum.repos.d/google-chrome.repo"):
-            commands = ["dnf config-manager setopt google-chrome.enabled=1","dnf install google-chrome-stable -y --best"]
+        if os.path.isfile("/etc/yum.repos.d/brave-browser-rpm-release.s3.brave.com_x86_64_.repo"):
+            commands = ["dnf install brave-browser -y --best"]
         else:
-            commands = ["echo -e '[google-chrome]\nname=google-chrome\nbaseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64\nenabled=1\ngpgcheck=1\ngpgkey=https://dl.google.com/linux/linux_signing_key.pub' > /etc/yum.repos.d/google-chrome.repo",
-            "dnf config-manager setopt google-chrome.enabled=1",
-            "dnf install google-chrome-stable -y --best"]
+            commands = ["dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/",
+            "rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc",
+            "dnf install brave-browser -y --best"]
         to_run = write_to_tmp(commands)
         if subprocess.call("pkexec bash  {}".format(to_run),shell=True)==0:
             return True
         return False
         
     def remove(self):
-        if subprocess.call("pkexec rpm --nodeps -e google-chrome-stable",shell=True)==0:
+        if subprocess.call("pkexec rpm --nodeps -e brave-browser",shell=True)==0:
             return True
         return False
 

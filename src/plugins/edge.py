@@ -30,7 +30,7 @@ if_true_skip         = False
 type_                = "installer"
 arch                 = ("all",)
 distro_name          = ("fedora",)
-distro_version       = ("all",)
+distro_version       = ("41","42","43","44","45","46")
 category             = "Internet"
 category_icon_theme  = "web-browser-symbolic"
 desktop_env          = ("all",)
@@ -69,7 +69,7 @@ class Plugin(BasePlugin):
         if os.path.isfile("/etc/yum.repos.d/microsoft-edge-beta.repo"):
             commands = ["dnf install microsoft-edge-stable -y --best"]
         else:
-            commands = ["dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge",
+            commands = ["dnf config-manager  addrepo --from-repofile=https://packages.microsoft.com/yumrepos/edge/config.repo --create-missing-dir --save-filename='microsoft-edge-beta.repo'",
             "rpm --import https://packages.microsoft.com/keys/microsoft.asc",
             "dnf install microsoft-edge-stable -y --best"]
         to_run = write_to_tmp(commands)
@@ -81,4 +81,5 @@ class Plugin(BasePlugin):
         if subprocess.call("pkexec rpm --nodeps -e microsoft-edge-stable",shell=True)==0:
             return True
         return False
+
 

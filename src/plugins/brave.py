@@ -65,10 +65,10 @@ class Plugin(BasePlugin):
         return not os.path.isfile("/usr/bin/brave-browser-stable")
         
     def install(self):
-        if os.path.isfile("/etc/yum.repos.d/brave-browser-rpm-release.s3.brave.com_x86_64_.repo"):
+        if os.path.isfile("/etc/yum.repos.d/brave-browser.repo"):
             commands = ["dnf install brave-browser -y --best"]
         else:
-            commands = ["dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/",
+            commands = ["echo -e '[brave-browser]\nname=Brave Browser\nbaseurl=https://brave-browser-rpm-release.s3.brave.com/$basearch\nenabled=1' > /etc/yum.repos.d/brave-browser.repo",
             "rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc",
             "dnf install brave-browser -y --best"]
         to_run = write_to_tmp(commands)

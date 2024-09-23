@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  google_chrome_fedora_64bit.py
+#  vivaldi.py
 #  
-#  Copyright 2018 youcef sourani <youssef.m.sourani@gmail.com>
+#  Copyright 2020 youcef sourani <youssef.m.sourani@gmail.com>
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -28,26 +28,27 @@ import os
 
 if_true_skip         = False
 type_                = "installer"
-arch                 = ("x86_64",)
+arch                 = ("all",)
 distro_name          = ("fedora",)
-distro_version       = ("41","42","43","44","45","46")
+distro_version       = ("35","36","37","38","39","40")
 category             = "Internet"
 category_icon_theme  = "web-browser-symbolic"
 desktop_env          = ("all",)
 display_type         = ("all",)
-title                = "Google Chrome"
-subtitle             = "Google Chrome Web Browser"
-keywords             = "chrome google browser"
-licenses             = (("License\nUNKNOWN","https://www.google.com/chrome"),)
-website              = ("WebSite","https://www.google.com/chrome")
+title                = "Edge"
+subtitle             = "Introducing the new Microsoft Edge web browser"
+keywords             = "edge"
+licenses             = (("License\nUNKNOWN","https://www.microsoft.com/en-us/edge?exp=e01&form=MA13FJ"),)
+website              = ("WebSite","https://www.microsoft.com/en-us/edge?exp=e01&form=MA13FJ")
                 
+
 
 class Plugin(BasePlugin):
     __gtype_name__ = get_uniq_name(__file__) #uniq name and no space
     def __init__(self,parent,threads):
         BasePlugin.__init__(self,parent=parent,
                             threads=threads,
-                            button_image="Chrome.png",
+                            button_image="edge.png",
                             button_install_label="Install",
                             button_remove_label="Remove",
                             button_frame=False,
@@ -56,28 +57,28 @@ class Plugin(BasePlugin):
                             waitmsg="Wait...",
                             runningmsg="Running...",
                             loadingmsg="Loading...",
-                            ifinstallfailmsg="Install Google Chrome Failed",
-                            ifremovefailmsg="Remove Google Chrome Failed",
+                            ifinstallfailmsg="Install Microsoft Edge Failed",
+                            ifremovefailmsg="Remove Microsoft Edge Failed",
                             parallel_install=False)
 
 
     def check(self):
-        return not os.path.isfile("/usr/bin/google-chrome")
+        return not os.path.isfile("/usr/bin/microsoft-edge-stable")
         
     def install(self):
-        if os.path.isfile("/etc/yum.repos.d/google-chrome.repo"):
-            commands = ["dnf config-manager setopt google-chrome.enabled=1","dnf install google-chrome-stable -y --best"]
+        if os.path.isfile("/etc/yum.repos.d/microsoft-edge-beta.repo"):
+            commands = ["dnf install microsoft-edge-stable -y --best"]
         else:
-            commands = ["echo -e '[google-chrome]\nname=google-chrome\nbaseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64\nenabled=1\ngpgcheck=1\ngpgkey=https://dl.google.com/linux/linux_signing_key.pub' > /etc/yum.repos.d/google-chrome.repo",
-            "dnf config-manager setopt google-chrome.enabled=1",
-            "dnf install google-chrome-stable -y --best"]
+            commands = ["dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge",
+            "rpm --import https://packages.microsoft.com/keys/microsoft.asc",
+            "dnf install microsoft-edge-stable -y --best"]
         to_run = write_to_tmp(commands)
         if subprocess.call("pkexec bash  {}".format(to_run),shell=True)==0:
             return True
         return False
         
     def remove(self):
-        if subprocess.call("pkexec rpm --nodeps -e google-chrome-stable",shell=True)==0:
+        if subprocess.call("pkexec rpm --nodeps -e microsoft-edge-stable",shell=True)==0:
             return True
         return False
 

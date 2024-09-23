@@ -30,7 +30,7 @@ if_true_skip         = False
 type_                = "Enable/Disable"
 arch                 = ("all",)
 distro_name          = ("fedora",)
-distro_version       = ("41","42","43","44","45","46")
+distro_version       = ("35","36","37","38","39","40")
 category             = "Utils"
 category_icon_theme  = "applications-utilities-symbolic"
 desktop_env          = ("all",)
@@ -63,19 +63,19 @@ class Plugin(BasePlugin):
 
 
     def check(self):
-        check = subprocess.check_output("dnf --dump-main-config | grep fastestmirror |cut -f2- -d \"=\"",shell=True).strip().decode("utf-8")
+        check = subprocess.check_output("dnf config-manager --dump | grep fastestmirror |cut -f2- -d \"=\"",shell=True).strip().decode("utf-8")
         if check in true:
             return False
         return True
 
         
     def install(self):
-        if subprocess.call("pkexec dnf config-manager setopt fastestmirror=1",shell=True)==0:
+        if subprocess.call("pkexec dnf config-manager --setopt=fastestmirror=True --save",shell=True)==0:
             return True
         return False
         
     def remove(self):
-        if subprocess.call("pkexec dnf config-manager setopt fastestmirror=0",shell=True)==0:
+        if subprocess.call("pkexec dnf config-manager --setopt=fastestmirror=False --save",shell=True)==0:
             return True
         return False
 

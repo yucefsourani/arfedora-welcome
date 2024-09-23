@@ -4,11 +4,11 @@ from gi.repository import Gtk,GLib
 import subprocess
 import threading
 
-if_true_skip         = True
+if_true_skip         = False
 type_                = "page"
 arch                 = ("all",)
 distro_name          = ("fedora",)
-distro_version       = ("41","42","43","44","45","46")
+distro_version       = ("35","36","37","38","39","40")
 category             = "Dnf"
 category_icon_theme  = "network-transmit-symbolic"
 desktop_env          = ("all",)
@@ -61,8 +61,8 @@ def __on_switch_changed(switch,property_,repo,action_row):
     return True
 
 def on_switch_changed(switch,property_,repo,row):
-    action = "0" if switch.status__ else "1"
-    if  subprocess.call("pkexec dnf config-manager setopt {}.enabled={}".format(repo.id,action),shell=True) != 0:
+    action = "disable" if switch.status__ else "enable"
+    if  subprocess.call("pkexec dnf config-manager --set-{} {}".format(action,repo.id),shell=True) != 0:
         GLib.idle_add(switch.set_active,switch.status__)
     else:
         if switch.status__ :
@@ -130,11 +130,7 @@ def on_apply(entry_row,listbox,scrolledwindow):
     link = entry_row.get_text().strip()
     if not link:
         return
-    if link.endswith(".repo"):
-        r = subprocess.call("pkexec dnf config-manager addrepo --from-repofile={} --create-missing-dir".format(link),shell=True)
-    else:
-        r = subprocess.call("pkexec dnf config-manager addrepo --set=baseurl={} --create-missing-dir".format(link),shell=True)
-    if r == 0:
+    if  subprocess.call("pkexec dnf config-manager --add-repo {}".format(link),shell=True) == 0:
         old_repos = list(dnf_base.repos.keys())
         dnf_base.repos.clear()
         dnf_base.read_all_repos()
