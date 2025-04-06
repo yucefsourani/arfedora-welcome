@@ -1,6 +1,6 @@
 Name:           arfedora-welcome
 Version:        1.0
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        makes it easy to install software in Fedora
 Obsoletes:      luniversalinstaller
 Provides:       luniversalinstaller
@@ -55,6 +55,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Apr 6 2025 yucuf sourani <youssef.m.sourani@gmail.com> 1.0-14
+- Release 14
+- Remove Microsoft Edge
+- Remove Skype
+- Remove Visual Studio Code
+- Remove Viber
+
+
 * Thu Mar 20 2025 yucuf sourani <youssef.m.sourani@gmail.com> 1.0-13
 - Release 13
 - Support F42
