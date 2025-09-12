@@ -69,7 +69,7 @@ class Plugin(BasePlugin):
         
         
     def check(self):
-        return False # make onshot
+        return True # make onshot
         
     def install(self):
         rpmfusion  = all([ utils.check_rpm_package_exists(pack) for pack in ["rpmfusion-nonfree-release", "rpmfusion-free-release"]])
