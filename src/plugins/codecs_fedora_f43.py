@@ -72,10 +72,13 @@ class Plugin(BasePlugin):
         return True # make onshot
         
     def install(self):
+        commands   = ["dnf group install multimedia -y --best"]
         rpmfusion  = all([ utils.check_rpm_package_exists(pack) for pack in ["rpmfusion-nonfree-release", "rpmfusion-free-release"]])
         to_install = [pack for pack in all_package_to_install if not utils.check_rpm_package_exists(pack)]
-        to_install = " ".join(to_install)
-        commands = ["dnf group install multimedia -y --best","dnf install {} -y --best".format(to_install)]
+        if to_install:
+            to_install = " ".join(to_install)
+            commands   += [f"dnf install {to_install} -y --best"] 
+
         to_remove = ""
         for p in (" ffmpeg-free ", " libavcodec-free ", " libavdevice-free ", " libavfilter-free ", " libavformat-free " ," libavutil-free ", " libpostproc-free ", " libswresample-free ", " libswscale-free ") :
             if utils.check_rpm_package_exists(p):
