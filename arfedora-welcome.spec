@@ -1,6 +1,6 @@
 Name:           arfedora-welcome
 Version:        1.0
-Release:        16%{?dist}
+Release:        17%{?dist}
 Summary:        makes it easy to install software in Fedora
 Obsoletes:      luniversalinstaller
 Provides:       luniversalinstaller
@@ -55,6 +55,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jun 24 2026 yucuf sourani <youssef.m.sourani@gmail.com> 1.0-17
+- Release 17
+- Remove google antigravity
+- Add brave origin
+
 * Thu Apr 16 2026 yucuf sourani <youssef.m.sourani@gmail.com> 1.0-16
 - Release 16
 - Support F44
